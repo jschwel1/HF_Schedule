@@ -1,9 +1,10 @@
-import java.io.File;
+ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Trainee {
 	public static final int NUM_PREFERENCES = 6;
+	public static final int SHIFTS_PER_DAY = 7;
 	int prefDay[];
 	int prefTime[];
 	int iterator;
@@ -38,7 +39,7 @@ public class Trainee {
 
 			// get preference time
 			input = s.nextInt();
-		//	while (input >= 8) input = s.nextInt();
+		//	while (input >= SHIFTS_PER_DAY) input = s.nextInt();
 			prefTime[count] = input;
 //			System.out.println("Preference #" + (count + 1)+" (" + prefDay[count] + ", " + prefTime[count] + ") ");			
 			count++;
@@ -77,7 +78,7 @@ public class Trainee {
 			
 			System.out.println("Enter the time of the prefered shift (0000-0600 = 0,..,2100-0000 = 7)\n");
 			input = s.nextInt();
-			while (input >= 8) input = s.nextInt();
+			while (input >= SHIFTS_PER_DAY) input = s.nextInt();
 			prefTime[count] = input;
 			
 			count++;
