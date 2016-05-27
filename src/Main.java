@@ -219,20 +219,76 @@ public class Main {
 		}
 		
 		// fill schedule with second-shifts (Pretty much identical to the first loop
-	/*	while (list2.size() > 0){
+		while (list2.size() > 0){
+			int day = list2.get(0).getPrefDay();
+			int time = list2.get(0).getPrefTime();
 			
-		}
-	*/	
-		/* Print out schedule graphically and/or in excel/.csv file */
-		
-		
-		/*for (int d = 0; d < 7; d++){
-			for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-				System.out.print(shift[d][t].getTrainee().getName() + "\t");
+			
+			// make sure the trainee hasn't gone through all preferences:
+			if (list2.get(0).getIter() == Trainee.NUM_PREFERENCES){
+				error+=list2.get(0).getName();
+				error+=", ";
+				list2.remove(0);
+				continue;
 			}
-			System.out.println();
-		}*/
+			
+			// check if the first trainee in the queue's top choice is taken
+			if (shift[day][time].hasTrainee()){
+				// if no preceptors on shift, go to priority
+				if (!shift[day][time].hasCCPrec() && !shift[day][time].hasDrPrec()){
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list2.get(0))){
+						list2.get(0).nextChoice();
+						continue;
+					}
+					else{
+						list2.add(shift[day][time].getTrainee());
+						shift[day][time].setTrainee(list1.get(0));
+						
+					}
+				}
+				// check that the correct preceptor is on shift
+				else if (((shift[day][time].hasCCPrec() && shift[day][time].getTrainee().isCCPrecepting())
+							|| (shift[day][time].hasDrPrec() && shift[day][time].getTrainee().isDrPrecepting()))
+						&& !((list2.get(0).isCCPrecepting() && shift[day][time].hasCCPrec()) 
+							|| (list2.get(0).isDrPrecepting() && shift[day][time].hasDrPrec()))){
+					list2.get(0).nextChoice();
+					continue;
+				}
+				else if (((shift[day][time].hasCCPrec() && shift[day][time].getTrainee().isCCPrecepting())
+						|| (shift[day][time].hasDrPrec() && shift[day][time].getTrainee().isDrPrecepting()))
+					&& !((list2.get(0).isCCPrecepting() && shift[day][time].hasCCPrec()) 
+						|| (list2.get(0).isDrPrecepting() && shift[day][time].hasDrPrec()))){
+					list2.add(shift[day][time].getTrainee());
+					shift[day][time].setTrainee(list2.get(0));
+				}
+				// neither will be precepting what they want, go to priority
+				else{
+					// if trainee already on the schedule has a higher priority, keep them....
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))){
+						list1.get(0).nextChoice();
+						continue;
+					}
+					// if the new trainee has a higher priority, move the existing one to the
+					// end of the list and replace him/her with a new one
+					else{
+						list2.add(shift[day][time].getTrainee());
+						shift[day][time].setTrainee(list2.get(0));
+						list2.remove(0);
+						continue;
+					}
+				}
+				
+			}
+			else{
+				shift[day][time].setTrainee(list2.get(0));
+				
+			}
+			list2.remove(0);
+		}
+		
+		/* Print out schedule graphically and/or in excel/.csv file */
 		Shift.showSchedule(shift);
+		// Open FileChooser to save this schedule
 	}
 
 	
