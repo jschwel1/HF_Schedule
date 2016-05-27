@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class Main {
@@ -279,12 +280,16 @@ public class Main {
 				}
 				
 			}
+			// if there is no trainee on that day and time, put this one in
 			else{
 				shift[day][time].setTrainee(list2.get(0));
 				
 			}
 			list2.remove(0);
 		}
+		
+		// show error message in case someone did not make it onto the schedule
+		JOptionPane.showMessageDialog(null, error, "Trainees missing at least one shift:", JOptionPane.ERROR_MESSAGE);
 		
 		/* Print out schedule graphically and/or in excel/.csv file */
 		Shift.showSchedule(shift);
