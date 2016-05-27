@@ -29,13 +29,13 @@ public class Main {
 		
 		
 	}
-	public static void run() throws FileNotFoundException{
+/*	public static void run() throws FileNotFoundException{
 		ArrayList<Trainee> list1 = new ArrayList<Trainee>();
 		ArrayList<Trainee> list2 = new ArrayList<Trainee>();
 		Shift[][] shift = new Shift[7][8];
 		String error = "The following trainees did not get at least one shift: ";
 		
-		/* Fill list1 with Trainees and fill their preference */
+		// Fill list1 with Trainees and fill their preference 
 		JFileChooser fc = new JFileChooser();
 		File f = new File("");
 		if (fc.showOpenDialog(null) == fc.APPROVE_OPTION) f = fc.getSelectedFile();
@@ -74,7 +74,11 @@ public class Main {
 			if (shift[day][time].hasTrainee()){
 				// if no preceptors on shift, go to priority
 				if (!shift[day][time].hasCCPrec() && !shift[day][time].hasDrPrec()){
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))){
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
+						list1.get(0).nextChoice();
+						continue;
+					}
+					else if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == -1){
 						list1.get(0).nextChoice();
 						continue;
 					}
@@ -101,8 +105,12 @@ public class Main {
 				}
 				// neither will be precepting what they want, go to priority
 				else{
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))){
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
 						list1.get(0).nextChoice();
+						continue;
+					}
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == -1){
+						list2.get(0).nextChoice();
 						continue;
 					}
 					else{
@@ -124,11 +132,11 @@ public class Main {
 		}
 		
 		// fill schedule with second-shifts (Pretty much identical to the first loop
-	/*	while (list2.size() > 0){
-			
-		}
-	*/	
-		/* Print out schedule graphically and/or in excel/.csv file */
+//		while (list2.size() > 0){
+//			
+///		}
+//		
+		// Print out schedule graphically and/or in excel/.csv file 
 		
 		
 		for (int d = 0; d < 7; d++){
@@ -138,6 +146,7 @@ public class Main {
 			System.out.println();
 		}
 	}
+*/
 	
 	public static void run(ArrayList<Trainee> tList, Shift[][] schedule) throws FileNotFoundException{
 		ArrayList<Trainee> list1 = new ArrayList<Trainee>();
@@ -148,8 +157,8 @@ public class Main {
 		
 		// fill schedule with first-shifts
 		while (list1.size() > 0){
-			int day = list1.get(0).getPrefDay();
-			int time = list1.get(0).getPrefTime();
+			int day;
+			int time;
 			
 			
 			// make sure the trainee hasn't gone through all preferences:
@@ -159,12 +168,18 @@ public class Main {
 				list1.remove(0);
 				continue;
 			}
+			day = list1.get(0).getPrefDay();
+			time = list1.get(0).getPrefTime();
 			
 			// check if the first trainee in the queue's top choice is taken
 			if (shift[day][time].hasTrainee()){
 				// if no preceptors on shift, go to priority
 				if (!shift[day][time].hasCCPrec() && !shift[day][time].hasDrPrec()){
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))){
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
+						list1.get(0).nextChoice();
+						continue;
+					}
+					else if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
 						list1.get(0).nextChoice();
 						continue;
 					}
@@ -191,7 +206,11 @@ public class Main {
 				}
 				// neither will be precepting what they want, go to priority
 				else{
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))){
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))==1){
+						list1.get(0).nextChoice();
+						continue;
+					}
+					else if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))== -1){
 						list1.get(0).nextChoice();
 						continue;
 					}
@@ -215,8 +234,10 @@ public class Main {
 		
 		// fill schedule with second-shifts (Pretty much identical to the first loop
 		while (list2.size() > 0){
-			int day = list2.get(0).getPrefDay();
-			int time = list2.get(0).getPrefTime();
+
+			System.out.println(list2.size() + " Remaining in list2");
+			int day;
+			int time;
 			
 			
 			// make sure the trainee hasn't gone through all preferences:
@@ -224,21 +245,25 @@ public class Main {
 				error+=list2.get(0).getName();
 				error+=", ";
 				list2.remove(0);
+				System.out.print("a");
 				continue;
 			}
+			day = list2.get(0).getPrefDay();
+			time = list2.get(0).getPrefTime();
 			
 			// check if the first trainee in the queue's top choice is taken
 			if (shift[day][time].hasTrainee()){
 				// if no preceptors on shift, go to priority
 				if (!shift[day][time].hasCCPrec() && !shift[day][time].hasDrPrec()){
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list2.get(0))){
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list2.get(0)) == 1){
 						list2.get(0).nextChoice();
+						System.out.print("b");
 						continue;
 					}
 					else{
 						list2.add(shift[day][time].getTrainee());
-						shift[day][time].setTrainee(list1.get(0));
-						
+						shift[day][time].setTrainee(list2.get(0));
+						System.out.print("c");
 					}
 				}
 				// check that the correct preceptor is on shift
@@ -247,6 +272,7 @@ public class Main {
 						&& !((list2.get(0).isCCPrecepting() && shift[day][time].hasCCPrec()) 
 							|| (list2.get(0).isDrPrecepting() && shift[day][time].hasDrPrec()))){
 					list2.get(0).nextChoice();
+					System.out.print("d");
 					continue;
 				}
 				else if (((shift[day][time].hasCCPrec() && shift[day][time].getTrainee().isCCPrecepting())
@@ -255,12 +281,18 @@ public class Main {
 						|| (list2.get(0).isDrPrecepting() && shift[day][time].hasDrPrec()))){
 					list2.add(shift[day][time].getTrainee());
 					shift[day][time].setTrainee(list2.get(0));
+					System.out.print("e");
 				}
 				// neither will be precepting what they want, go to priority
 				else{
 					// if trainee already on the schedule has a higher priority, keep them....
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))){
-						list1.get(0).nextChoice();
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list2.get(0)) == 1){
+						list2.get(0).nextChoice();
+						System.out.print("f");
+						continue;
+					}
+					else if (shift[day][time].getTrainee().hasHigherPriorityThan(list2.get(0)) == -1){
+						list2.get(0).nextChoice();
 						continue;
 					}
 					// if the new trainee has a higher priority, move the existing one to the
@@ -269,6 +301,7 @@ public class Main {
 						list2.add(shift[day][time].getTrainee());
 						shift[day][time].setTrainee(list2.get(0));
 						list2.remove(0);
+						System.out.print("g");
 						continue;
 					}
 				}
@@ -277,7 +310,7 @@ public class Main {
 			// if there is no trainee on that day and time, put this one in
 			else{
 				shift[day][time].setTrainee(list2.get(0));
-				
+				System.out.print("h");
 			}
 			list2.remove(0);
 		}

@@ -140,13 +140,18 @@ public class Trainee implements ActionListener{
 		return name;
 	}
 	
-	public boolean hasHigherPriorityThan(Trainee t){
-		int p1 = this.getIter()+(this.numSemesters()/2);
-		int p2 = t.getIter()+(t.numSemesters()/2);
+	public int hasHigherPriorityThan(Trainee t){
+		int p1 = this.getIter()*(this.numSemesters()*2);
+		int p2 = t.getIter()*(t.numSemesters()/2);
 		
-		if (p1 > p2) return true;
+		if (this.isCCPrecepting()) p1+= 5;
+		if (this.isDrPrecepting()) p1+= 5;
+		if (t.isCCPrecepting()) p2+= 5;
+		if (t.isDrPrecepting()) p2+= 5;
 		
-		return false;
+		if (p1 > p2) return 1;
+		if (p1 == p2) return -1;
+		return 0;
 	}
 
 	public int numSemesters(){
