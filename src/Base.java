@@ -29,14 +29,14 @@ public class Base implements ActionListener{
 	JTextArea log;
 	ArrayList<Trainee> traineeList;
 	Shift schedule[][];
-	
+	String scheduleFile;
 	
 	public Base(){
 		JFrame f = new JFrame("Main Jawn");
 		Container window = f.getContentPane();
 		JScrollPane pane = new JScrollPane();
 		GridBagConstraints c = new GridBagConstraints();
-	
+		scheduleFile = "";
 		/* Initialize Trainee list and schedule variables */
 		traineeList = new ArrayList<Trainee>();
 		schedule = new Shift[7][Trainee.SHIFTS_PER_DAY];
@@ -171,22 +171,25 @@ public class Base implements ActionListener{
 				try {
 					s = new Scanner(file);
 					String str;
-					for (int d = 0; d < 7; d++){
-						for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+						for (int d = 0; d < 7; d++){	
 							schedule[d][t] = new Shift();
 							str = s.next();
-							if (str.equals("y")) schedule[d][t].setCCPreceptor(true);
+							if (str.charAt(0) == 'y') schedule[d][t].setCCPreceptor(true);
 							else schedule[d][t].setCCPreceptor(false);
 							System.out.println("("+d+", "+t+") -> " + str);
 						}
 					}
-					for (int d = 0; d < 7; d++){
-						for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-							if (s.next().equals("y")) schedule[d][t].setDrPreceptor(true);
+					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+						for (int d = 0; d < 7; d++){	
+							str = s.next();
+							if (str.charAt(0) == 'y') schedule[d][t].setDrPreceptor(true);
 							else schedule[d][t].setDrPreceptor(false);
+							System.out.println("("+d+", "+t+") -> \"" + str+"\"");
 						}
 					}
-					Main.showPreceptorSchedule(schedule);
+					Shift.showPreceptorSchedule(schedule);
+					scheduleFile=fc.getSelectedFile().getName();
 				} catch (FileNotFoundException e1) {
 					JOptionPane.showMessageDialog(null, "Could not read file: " + file.getName());
 				}
@@ -194,7 +197,7 @@ public class Base implements ActionListener{
 			}
 		}
 		else if (e.getSource() == buildSchedule){
-			log.append("Building Schedule\n");
+			Shift.buildPreceptorSchedule(schedule);
 		}
 		else if (e.getSource() == saveTraineeList){
 			JFileChooser fc = new JFileChooser("Save trainee list");
@@ -209,6 +212,7 @@ public class Base implements ActionListener{
 					writer.println(traineeList.get(i).getInfo());
 				}
 				writer.close();
+				
 			} catch (FileNotFoundException e1) {
 				
 				JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
@@ -222,20 +226,21 @@ public class Base implements ActionListener{
 			try {
 				writer = new PrintWriter(fc.getSelectedFile());
 				for (int d = 0; d < 7; d++){
-					for (int t = 0; t < Trainee.NUM_PREFERENCES; t++){
+					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
 						if(schedule[d][t].hasCCPrec()) writer.print("y ");
 						else writer.print("n ");
 					}
 					writer.println();
 				}
+				writer.println();
 				for (int d = 0; d < 7; d++){
-					for (int t = 0; t < Trainee.NUM_PREFERENCES; t++){
+					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
 						if(schedule[d][t].hasDrPrec()) writer.print("y ");
 						else writer.print("n ");
 					}
 					writer.println();
 				}
-				
+				scheduleFile=fc.getSelectedFile().getName();
 				writer.close();
 			} catch (FileNotFoundException e1) {
 				
@@ -246,8 +251,8 @@ public class Base implements ActionListener{
 			int index = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the trainee you would like to remove (one at a time)"));
 			traineeList.remove(index);
 		}
-		
-		log.setText("");
+		// UPDATE LOG
+		log.setText("Schedule File: " + scheduleFile + "\n\nTrainees:\n");
 		for (int i = 0; i < traineeList.size(); i++){
 			log.append("("+i+") " + traineeList.get(i).toString() + "\n\n");
 		}

@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -143,11 +145,11 @@ public class Main {
 	}
 	
 	public static void run(ArrayList<Trainee> tList, Shift[][] schedule) throws FileNotFoundException{
-		ArrayList<Trainee> list1 = tList;
+		ArrayList<Trainee> list1 = new ArrayList<Trainee>();
 		ArrayList<Trainee> list2 = new ArrayList<Trainee>();
 		Shift[][] shift = schedule;
 		String error = "The following trainees did not get at least one shift: ";
-		
+		list1.addAll(tList);
 		
 		// fill schedule with first-shifts
 		while (list1.size() > 0){
@@ -230,68 +232,11 @@ public class Main {
 			}
 			System.out.println();
 		}*/
-		showSchedule(shift);
+		Shift.showSchedule(shift);
 	}
 
 	
-	public static void showSchedule(Shift[][] schedule){
-		JFrame frame = new JFrame("Schedule");
-		Container window = frame.getContentPane();
-		JTextField blocks[][] = new JTextField[schedule.length][schedule[0].length];
-		GridBagConstraints c;
-		
-		frame.setVisible(true);
-		frame.setSize(700,700);
-	
-		
-		window.setLayout(new GridBagLayout());
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridheight = 1;
-		c.gridwidth = 1;
-		
-		for (int d = 0; d < blocks.length; d++){
-			for (int t = 0; t < blocks[0].length; t++){
-				blocks[d][t] = new JTextField(schedule[d][t].getTrainee().getName());
-				blocks[d][t].setEditable(false);
-				c.gridx = d;
-				c.gridy = t;
-				window.add(blocks[d][t], c);
-			}
-		}
-	}
-	public static void showPreceptorSchedule(Shift[][] schedule){
-		JFrame frame = new JFrame("Schedule");
-		Container window = frame.getContentPane();
-		JTextField blocks[][] = new JTextField[schedule.length][schedule[0].length];
-		GridBagConstraints c;
-		
-		frame.setVisible(true);
-		frame.setSize(700,700);
-		
-		
-		window.setLayout(new GridBagLayout());
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.gridheight = 1;
-		c.gridwidth = 1;
-		
-		for (int d = 0; d < blocks.length; d++){
-			for (int t = 0; t < blocks[0].length; t++){
-				String s = "";
-				if (schedule[d][t].hasCCPrec()) s+= "[CC] ";
-				else s+="[  ] ";
-				if (schedule[d][t].hasDrPrec()) s+= "[Dr]";
-				else s+="[  ]";
-				
-				blocks[d][t] = new JTextField(s);
-				blocks[d][t].setEditable(false);
-				c.gridx = d;
-				c.gridy = t;
-				window.add(blocks[d][t], c);
-			}
-		}
-	}
+
+
 	
 }
-
