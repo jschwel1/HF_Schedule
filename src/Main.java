@@ -1,17 +1,11 @@
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 public class Main {
 	public static void main(String[] args) throws FileNotFoundException{
@@ -294,10 +288,52 @@ public class Main {
 		/* Print out schedule graphically and/or in excel/.csv file */
 		Shift.showSchedule(shift);
 		// Open FileChooser to save this schedule
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle("Save this schedule");
+		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+			PrintWriter writer = new PrintWriter(fc.getSelectedFile());
+			char delim = ',';
+			
+			writer.println(delim+"Sunday"+delim+"Monday"+delim+"Tuesday"+delim+"Wednesday"+delim+"Thursday"+delim+"Friday"+delim+"Saturday");
+			
+			for (int i = 0; i < Trainee.SHIFTS_PER_DAY; i++){
+				switch (i){
+					case 0:
+						writer.print("\"0000-0600\"");
+						break;
+					case 1:
+						writer.print("\"0600-0900\"");
+						break;
+					case 2:
+						writer.print("\"0900-1200\"");
+						break;
+					case 3:
+						writer.print("\"1200-1500\"");
+						break;
+					case 4:
+						writer.print("\"1500-1800\"");
+						break;
+					case 5:
+						writer.print("\"1800-2100\"");
+						break;
+					case 6:
+						writer.print("\"2100-0000\"");
+						break;
+					default:
+						writer.print("####");
+				}
+				for (int j = 0; j < 7; j++){
+					if (schedule[i][j].hasTrainee())
+						writer.print(delim+schedule[i][j].getTrainee().getName());
+					else
+						writer.print(delim+"");
+					
+				}
+				writer.println();
+			}
+			writer.close();
+		}
 	}
-
-	
-
 
 	
 }

@@ -145,6 +145,7 @@ public class Base implements ActionListener{
 		}
 		else if (e.getSource() == openTraineeList){
 			JFileChooser fc = new JFileChooser("Open trainee list file");
+			fc.setDialogTitle("Open trainee list file");
 			File file;
 			Scanner s;
 			
@@ -163,6 +164,7 @@ public class Base implements ActionListener{
 		}
 		else if (e.getSource() == openSchedule){
 			JFileChooser fc = new JFileChooser("Open existing schedule file");
+			fc.setDialogTitle("Open existing schedule file");
 			File file;
 			Scanner s;
 			
@@ -201,6 +203,7 @@ public class Base implements ActionListener{
 		}
 		else if (e.getSource() == saveTraineeList){
 			JFileChooser fc = new JFileChooser("Save trainee list");
+			fc.setDialogTitle("Save Trainee List");
 			PrintWriter writer;
 			
 			fc.showSaveDialog(null);
@@ -220,6 +223,7 @@ public class Base implements ActionListener{
 		}
 		else if (e.getSource() == saveSchedule){
 			JFileChooser fc = new JFileChooser("Save Schedule");
+			fc.setDialogTitle("Save Preceptor Schedule");
 			PrintWriter writer;
 			
 			fc.showSaveDialog(null);
