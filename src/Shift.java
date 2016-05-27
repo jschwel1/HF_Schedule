@@ -20,6 +20,15 @@ public class Shift {
 		ccPrec = ccPreceptor;
 		trainee = null;
 	}
+	
+	public void setCCPreceptor(boolean b){
+		ccPrec = b;
+	}
+	
+	public void setDrPreceptor(boolean b){
+		drPrec = b;
+	}
+	
 	public boolean hasDrPrec(){
 		return drPrec;
 	}

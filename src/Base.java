@@ -130,7 +130,11 @@ public class Base implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == run){
-			
+			try {
+				Main.run(traineeList, schedule);
+			} catch (FileNotFoundException e1) {
+				JOptionPane.showMessageDialog(null, "Uh oh! Something bad happened...");
+			}
 		}
 		else if (e.getSource() == addTrainee){
 			log.append("New Trainee\n");
@@ -158,7 +162,36 @@ public class Base implements ActionListener{
 			}
 		}
 		else if (e.getSource() == openSchedule){
-			log.append("Opening an existing schedule...\n");
+			JFileChooser fc = new JFileChooser("Open existing schedule file");
+			File file;
+			Scanner s;
+			
+			if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+				file = fc.getSelectedFile();
+				try {
+					s = new Scanner(file);
+					String str;
+					for (int d = 0; d < 7; d++){
+						for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+							schedule[d][t] = new Shift();
+							str = s.next();
+							if (str.equals("y")) schedule[d][t].setCCPreceptor(true);
+							else schedule[d][t].setCCPreceptor(false);
+							System.out.println("("+d+", "+t+") -> " + str);
+						}
+					}
+					for (int d = 0; d < 7; d++){
+						for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+							if (s.next().equals("y")) schedule[d][t].setDrPreceptor(true);
+							else schedule[d][t].setDrPreceptor(false);
+						}
+					}
+					Main.showPreceptorSchedule(schedule);
+				} catch (FileNotFoundException e1) {
+					JOptionPane.showMessageDialog(null, "Could not read file: " + file.getName());
+				}
+				
+			}
 		}
 		else if (e.getSource() == buildSchedule){
 			log.append("Building Schedule\n");
@@ -182,7 +215,32 @@ public class Base implements ActionListener{
 			}
 		}
 		else if (e.getSource() == saveSchedule){
-			log.append("Saving Schedule\n");
+			JFileChooser fc = new JFileChooser("Save Schedule");
+			PrintWriter writer;
+			
+			fc.showSaveDialog(null);
+			try {
+				writer = new PrintWriter(fc.getSelectedFile());
+				for (int d = 0; d < 7; d++){
+					for (int t = 0; t < Trainee.NUM_PREFERENCES; t++){
+						if(schedule[d][t].hasCCPrec()) writer.print("y ");
+						else writer.print("n ");
+					}
+					writer.println();
+				}
+				for (int d = 0; d < 7; d++){
+					for (int t = 0; t < Trainee.NUM_PREFERENCES; t++){
+						if(schedule[d][t].hasDrPrec()) writer.print("y ");
+						else writer.print("n ");
+					}
+					writer.println();
+				}
+				
+				writer.close();
+			} catch (FileNotFoundException e1) {
+				
+				JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
+			}
 		}
 		else if (e.getSource() == removeTrainee){
 			int index = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the trainee you would like to remove (one at a time)"));
