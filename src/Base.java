@@ -31,6 +31,11 @@ public class Base implements ActionListener{
 	Shift schedule[][];
 	String scheduleFile;
 	
+	/**
+	 * Constructs the base station (window opened when initially run) which has
+	 * options to add trainees, build schedules, open and save files of trainee 
+	 * lists or preceptor schedules and run the trainee sort.
+	 */
 	public Base(){
 		JFrame f = new JFrame("Main Jawn");
 		Container window = f.getContentPane();
@@ -122,12 +127,12 @@ public class Base implements ActionListener{
 		c.gridwidth = 3;
 		c.gridheight = 2;
 		window.add(log, c);
-		
-		
-		
+
 	}
 
-
+/**
+ * Checks the Action Events and performs the appropriate commands
+ */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == run){
 			try {

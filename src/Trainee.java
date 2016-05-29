@@ -31,13 +31,20 @@ public class Trainee implements ActionListener{
 	JCheckBox ccPrecepting;
 	JCheckBox drPrecepting;
 	
+	/**
+	 * Initialize empty trainee with empty arrays of preferences
+	 */
 	Trainee(){
 		prefDay = new int[NUM_PREFERENCES];
 		prefTime = new int[NUM_PREFERENCES];
 		iterator = 0;
 		
 	}
-	
+	/**
+	 * Initialize a new Trainee from a file (organized by save function in Base.java--should be moved eventually
+	 * @param s - Scanner with Trainee list file
+	 * @throws FileNotFoundException - throws error if file cannot be found
+	 */
 	Trainee(Scanner s) throws FileNotFoundException{
 		this();
 		int count = 0;
@@ -82,7 +89,9 @@ public class Trainee implements ActionListener{
 	}
 	
 
-	
+	/**
+	 * Fills preferences from command line
+	 */
 	public void fillPrefs(){
 		Scanner s = new Scanner(System.in);
 		int count = 0;
@@ -118,28 +127,63 @@ public class Trainee implements ActionListener{
 		semesters = s.nextInt();
 	}
 	
-	
+	/**
+	 * Get the current preference the Trainee is on
+	 * @return 0 = first choice, Trainee.NUM_PREFERENCES-1 = last choice
+	 */
 	public int getIter(){
 		return iterator;
 	}
 	
+	/**
+	 * Get the current preferred day
+	 * @return integer from 0-6 for each day of the week based on the current preference
+	 */
 	public int getPrefDay(){
 		return prefDay[iterator];
 	}
+	
+	/**
+	 * Get the current preferred time during the preferred day
+	 * @return integer from 0-Trainee.SHIFTS_PER_DAY-1, current chioce's time
+	 */
 	public int getPrefTime(){
 		return prefTime[iterator];
 	}
+	
+	/**
+	 * Is the Trainee Crew Chief Precepting?
+	 * @return boolean, whether or not the Trainee is CC Precepting
+	 */
 	public boolean isCCPrecepting(){
 		return ccPrec;
 	}
+	
+	/**
+	 * Is the Trainee Driver Precepting?
+	 * @return boolean, whether or not the Trainee is Driver Precepting
+	 */
 	public boolean isDrPrecepting(){
 		return drPrec;
 	}
 	
+	/**
+	 * Gets the Trainee's name
+	 * @return String, the trainee's name
+	 */
 	public String getName(){
 		return name;
 	}
 	
+	/**
+	 * Checks the priorities of this trainee against another 
+	 * @param t other trainee
+	 * @return integer: 1 -> this trainee has a higher priority than the other
+	 * 							passed as an argument.
+	 * 					0 -> The other trainee has a higher priority than this
+	 * 							one
+	 * 				   -1 -> They both have the same priority
+	 */
 	public int hasHigherPriorityThan(Trainee t){
 		int p1 = this.getIter()*(this.numSemesters()*2);
 		int p2 = t.getIter()*(t.numSemesters()/2);
@@ -154,17 +198,35 @@ public class Trainee implements ActionListener{
 		return 0;
 	}
 
+	/**
+	 * Gets the number of semesters the Trainee has been in the agency for
+	 * @return int, number of semesters
+	 */
 	public int numSemesters(){
 		return semesters;
 	}
 	
+	/**
+	 * Sets the iterator to a certain position
+	 * @param i, integer number of position for the iterator
+	 * 			0 = reset to first choice,
+	 * 			Trainee.NUM_PREFERENCES = set to last choice
+	 */
 	public void setIterator(int i){
 		iterator = i;
 	}
+	
+	/**
+	 * Move the trainee's preference iterator to the next choice
+	 */
 	public void nextChoice(){
 		if (++iterator > NUM_PREFERENCES) iterator--;
 	}
-	
+
+	/**
+	 * returns a string representation of the trainee with comma separations
+	 * between the information
+	 */
 	public String toString(){
 		String s = "";
 		s += name + "\n";
@@ -181,6 +243,11 @@ public class Trainee implements ActionListener{
 		
 		return s;
 	}
+	
+	/**
+	 * Gets the trainee's information (except name) with tab-separated values
+	 * @return
+	 */
 	public String getInfo(){
 		String s = "";
 		for (int i = 0; i < NUM_PREFERENCES; i++){
@@ -197,6 +264,9 @@ public class Trainee implements ActionListener{
 		return s;
 	}
 
+	/**
+	 * A GUI system to help build a trainee 
+	 */
 	public void GUIBuild(){
 		JFrame frame = new JFrame("New Trainee");
 		Container window = frame.getContentPane();
@@ -213,7 +283,9 @@ public class Trainee implements ActionListener{
 		submit.addActionListener(this);
 		submit.setActionCommand("submit");
 		
+		// keeps track of how many shifts were already selected
 		iterator = 0;
+		// set up all the buttons and add them to the window
 		for (int d = 1; d < shiftButton.length; d++){
 			for (int t = 1; t < shiftButton[0].length; t++){
 				shiftButton[d][t] = new JButton("#");
@@ -222,6 +294,7 @@ public class Trainee implements ActionListener{
 			}
 		}
 		
+		// non-clickable buttons, but make it clear what buttons are what
 		shiftButton[0][0] = new JButton("Time\\Day");
 		shiftButton[1][0] = new JButton("Sunday");
 		shiftButton[2][0] = new JButton("Monday");
@@ -239,14 +312,18 @@ public class Trainee implements ActionListener{
 		shiftButton[0][6] = new JButton("1800");
 		shiftButton[0][7] = new JButton("2100");
 		
+		// set up the JFrame and Container with a GridBagLayout
 		frame.setVisible(true);
 		frame.setVisible(true);
 		frame.setSize(800,600);
 		frame.setLocationRelativeTo(null);
 		window.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		
+		// fill all the elements as far out as they need to be
 		c.fill = GridBagConstraints.HORIZONTAL;
 		
+		// Add all the elements in their correct positions
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 4;
@@ -272,8 +349,6 @@ public class Trainee implements ActionListener{
 		c.gridwidth = 1;
 		window.add(submit, c);
 		
-		
-		
 		for (int d = 0; d < shiftButton.length; d++){
 			for (int t = 0; t < shiftButton[0].length; t++){
 				c.gridx=d;
@@ -281,29 +356,43 @@ public class Trainee implements ActionListener{
 				window.add(shiftButton[d][t], c);
 			}
 		}
+	}
+	
+	/**
+	 * Checks if the Shift passed to it has any of the correct preceptors
+	 * @param s Shift to check
+	 * @return int: number of preceptors on the shift
+	 */
+	public int hasPreceptor(Shift s){
+		int n = 0;
 		
+		if (s.hasCCPrec() && this.isCCPrecepting()) n++;
+		if (s.hasDrPrec() && this.isDrPrecepting()) n++;
 		
-		
-		//while (iterator < NUM_PREFERENCES){}
-		//iterator = 0;
-		
-		// add information
-		
+		return n;
 	}
 	
 	
-	
+	/**
+	 * Action even for the GUI Buttons
+	 */
 	public void actionPerformed(ActionEvent e) {
+		// look through all the shift buttons (other than the description ones)
 		for (int d = 1; d < shiftButton.length; d++){
 			for (int t = 1; t < shiftButton[0].length; t++){
+				// if the ActionEvent came from one of the shift buttons
 				if (e.getActionCommand().equals("pref"+d+","+t)){
-					
+					// check if has already been clicked
 					if(shiftButton[d][t].getText().equals("#")){
+						// make sure they don't select too many shifts
 						if (iterator >= NUM_PREFERENCES) return;
 						shiftButton[d][t].setText(iterator+1+"");
 						iterator++;
 					}
 					else{
+						// If it has already been selected, drop the number
+						// put on all the  preferences after it, then reset its
+						// face value to '#' and decrement the iterator
 						for (int dd = 1; dd < shiftButton.length; dd++){
 							for (int tt = 1; tt < shiftButton[0].length; tt++){
 								if(!shiftButton[dd][tt].getText().equals("#")){
@@ -320,8 +409,9 @@ public class Trainee implements ActionListener{
 				}
 			}
 		}
-		
+		// if the source was from the GUI submit button, try setting all the values to what was put on the GUI window
 		if (e.getSource() == submit){
+			// Integer.parseInt() can throw an error if the value isn't strictly a number
 			try {
 				name = nameInput.getText();
 				semesters = Integer.parseInt(semesterInput.getText());

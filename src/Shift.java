@@ -1,5 +1,4 @@
 import java.awt.Container;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -10,56 +9,105 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-public class Shift implements ActionListener{
+public class Shift{
 	boolean drPrec;
 	boolean ccPrec;
 	Trainee trainee;
 	public static int buildState;
 	
+	
+	/**
+	 * Build a Shift object without any preceptors or Trainees
+	 */
 	Shift(){
 		drPrec = false;
 		ccPrec = false;
 		trainee = null;
 	}
 	
+	/**
+	 * Build a Shift object
+	 * @param driverPreceptor - Boolean: Driver Preceptor or not
+	 * @param ccPreceptor - Boolean: Crew Chief Preceptor or not
+	 * @param trainee - Boolean: Trainee or not
+	 */
 	Shift(boolean driverPreceptor, boolean ccPreceptor, Trainee trainee){
 		drPrec = driverPreceptor;
 		ccPrec = ccPreceptor;
 		this.trainee = trainee;
 	}
+	
+	/**
+	 * Build a Shift object, without a Trainee
+	 * @param driverPreceptor - Boolean: Driver Preceptor or not
+	 * @param ccPreceptor - Boolean: Crew Chief Preceptor or not
+	 */
 	Shift(boolean driverPreceptor, boolean ccPreceptor){
 		drPrec = driverPreceptor;
 		ccPrec = ccPreceptor;
 		trainee = null;
 	}
 	
+	/**
+	 * Sets whether  or not there is a CC Preceptor
+	 * @param b - boolean - CC preceptor or not
+	 */
 	public void setCCPreceptor(boolean b){
 		ccPrec = b;
 	}
 	
+	/**
+	 * Sets whether or not there is a Driver Preceptor
+	 * @param b - boolean: Driver Preceptor or not
+	 */
 	public void setDrPreceptor(boolean b){
 		drPrec = b;
 	}
 	
+	/**
+	 * Determines if there is a driver preceptor on shift
+	 * @return Boolean, whether or not a driver preceptor is on shift
+	 */
 	public boolean hasDrPrec(){
 		return drPrec;
 	}
 	
+	/**
+	 * Determines if there is a crew chief preceptor on shift
+	 * @return Boolean, whether or not a crew chief preceptor is on shift
+	 */
 	public boolean hasCCPrec(){
 		return ccPrec;
 	}
+	
+	/**
+	 * Determines if a trainee is on shift or not
+	 * @return boolean, whether or not a trainee is on shift
+	 */
 	public boolean hasTrainee(){
 		if (trainee == null) return false;
 		return true;
 	}
 	
+	/**
+	 * Places (or removes) trainee a trainee on (or from) the shift
+	 * @param t - Trainee object (null to remove)
+	 */
 	public void setTrainee(Trainee t){
 		trainee = t;
 	}
+	/**
+	 * Gets the Trainee currently on shift
+	 * @return Trainee: the current trainee on shift (null if none)
+	 */
 	public Trainee getTrainee(){
 		return trainee;
 	}
 	
+	/**
+	 * GUI window to set what kind of preceptors are on which shifts
+	 * @param schedule - Matrix of [7][Trainee.SHIFTS_PER_DAY] to store the values ins
+	 */
 	public static void buildPreceptorSchedule(Shift[][] schedule){
 		
 		JFrame frame = new JFrame("Which shifts  have CC Preceptors");
@@ -198,6 +246,10 @@ public class Shift implements ActionListener{
 		
 	}
 	
+	/**
+	 * Displays the weekly schedule with Trainee names in the appropriate spots
+	 * @param schedule - The matrix of Shift objects to read the names from
+	 */
 	public static void showSchedule(Shift[][] schedule){
 		JFrame frame = new JFrame("Schedule");
 		Container window = frame.getContentPane();
@@ -262,7 +314,10 @@ public class Shift implements ActionListener{
 			}
 		}
 	}
-	
+	/**
+	 * Displays a window with a weekly schedule of when what preceptors will be on shifts
+	 * @param schedule - Matrix of Shifts to read the values from
+	 */
 	public static void showPreceptorSchedule(Shift[][] schedule){
 		JFrame frame = new JFrame("Schedule");
 		Container window = frame.getContentPane();
@@ -333,10 +388,6 @@ public class Shift implements ActionListener{
 	}
 
 
-	public void actionPerformed(ActionEvent arg0) {
-		
-		
-	}
 	
 	
 	
