@@ -119,13 +119,17 @@ public class Main {
 		// show error message in case someone did not make it onto the schedule
 		JOptionPane.showMessageDialog(null, error, "Trainees missing at least one shift:", JOptionPane.ERROR_MESSAGE);
 		
-		/* Print out schedule graphically and/or in excel/.csv file */
+		/* Print out schedule graphically and save as .csv file */
 		Shift.showSchedule(shift);
 		// Open FileChooser to save this schedule
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Save this schedule");
 		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
-			PrintWriter writer = new PrintWriter(fc.getSelectedFile());
+			PrintWriter writer;
+			
+			if (!fc.getSelectedFile().getName().endsWith(".csv")) 
+				writer = new PrintWriter(fc.getSelectedFile().getPath()+ ".csv");
+			else writer = new PrintWriter(fc.getSelectedFile());
 			char delim = ',';
 			
 			writer.println(delim+"Sunday"+delim+"Monday"+delim+"Tuesday"+delim+"Wednesday"+delim+"Thursday"+delim+"Friday"+delim+"Saturday");
