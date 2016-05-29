@@ -63,29 +63,33 @@ public class Main {
 						continue;
 					}
 					else{
+						if (time == Shift.OVERNIGHT){
+							list1.add(shift[day][time].getTrainee());
+							
+						}
 						list1.add(shift[day][time].getTrainee());
 						shift[day][time].setTrainee(list1.get(0));
 						
 					}
 				}
-				// check that the correct preceptor is on shift
-				else if (((shift[day][time].hasCCPrec() && shift[day][time].getTrainee().isCCPrecepting())
-							|| (shift[day][time].hasDrPrec() && shift[day][time].getTrainee().isDrPrecepting()))
-						&& !((list1.get(0).isCCPrecepting() && shift[day][time].hasCCPrec()) 
-							|| (list1.get(0).isDrPrecepting() && shift[day][time].hasDrPrec()))){
+				// If the trainee already there has a preceptor and the new 
+				// one doesn't, the original gets to keep it
+				else if (shift[day][time].getTrainee().hasPreceptor(shift[day][time]) > 0 
+						&& list1.get(0).hasPreceptor(shift[day][time]) == 0){
 					list1.get(0).nextChoice();
 					continue;
 				}
-				else if (((shift[day][time].hasCCPrec() && shift[day][time].getTrainee().isCCPrecepting())
-						|| (shift[day][time].hasDrPrec() && shift[day][time].getTrainee().isDrPrecepting()))
-					&& !((list1.get(0).isCCPrecepting() && shift[day][time].hasCCPrec()) 
-						|| (list1.get(0).isDrPrecepting() && shift[day][time].hasDrPrec()))){
+				// if the new trainee can have a preceptor on this shift, and
+				// the one already there does't have one give it to the 
+				// precepting trainee.
+				else if (shift[day][time].getTrainee().hasPreceptor(shift[day][time]) == 0 
+						&& list1.get(0).hasPreceptor(shift[day][time]) > 0){
 					list1.add(shift[day][time].getTrainee());
 					shift[day][time].setTrainee(list1.get(0));
 				}
-				// neither will be precepting what they want, go to priority
+				// If both or neither can/will precept, go to priority
 				else{
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))==1){
+					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
 						list1.get(0).nextChoice();
 						continue;
 					}

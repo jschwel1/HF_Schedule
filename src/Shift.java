@@ -13,8 +13,7 @@ public class Shift{
 	boolean drPrec;
 	boolean ccPrec;
 	Trainee trainee;
-	public static int buildState;
-	
+	public static int OVERNIGHT = 0;
 	
 	/**
 	 * Build a Shift object without any preceptors or Trainees
