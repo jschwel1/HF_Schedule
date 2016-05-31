@@ -19,6 +19,7 @@ public class Trainee implements ActionListener{
 	int prefTime[];
 	int iterator;
 	int semesters;
+	int hours;
 	boolean ccPrec;
 	boolean drPrec;
 	String name;
@@ -38,7 +39,7 @@ public class Trainee implements ActionListener{
 		prefDay = new int[NUM_PREFERENCES];
 		prefTime = new int[NUM_PREFERENCES];
 		iterator = 0;
-		
+		hours = 0;
 	}
 	/**
 	 * Initialize a new Trainee from a file (organized by save function in Base.java--should be moved eventually
@@ -143,12 +144,33 @@ public class Trainee implements ActionListener{
 		return prefDay[iterator];
 	}
 	
+	
+	/**
+	 * Get the preferred day of the specified choice
+	 * @param i - integer choice number 
+	 * @return day
+	 */
+	public int getPrefDay(int i){
+		return prefDay[i];
+	}
+	
+	
+	
 	/**
 	 * Get the current preferred time during the preferred day
 	 * @return integer from 0-Trainee.SHIFTS_PER_DAY-1, current chioce's time
 	 */
 	public int getPrefTime(){
 		return prefTime[iterator];
+	}
+	
+	/**
+	 * Get the prefered time of the specified choice
+	 * @param i - choice number between 0 & Trainee.NUM_PREFERENCES
+	 * @return integer from 0-Trainee.SHIFTS_PER_DAY -1
+	 */
+	public int getPrefTime(int i){
+		return prefTime[i];
 	}
 	
 	/**
@@ -165,6 +187,35 @@ public class Trainee implements ActionListener{
 	 */
 	public boolean isDrPrecepting(){
 		return drPrec;
+	}
+	
+	/**
+	 * returns the number of hours the Trainee is doing weekly
+	 * @return int: hours working per week
+	 */
+	public int getHours(){
+		return hours;
+	}
+
+	/**
+	 * Sets the number of hours the trainee will be working
+	 * @param hr - int: number of hours
+	 */
+	public void setHours(int hr){
+		hours = hr;
+	}
+	
+	/**
+	 * Adds hours to the Trainee's current amount 
+	 * (shorter version of Trainee.sethours(Trainee.getHours+hr);) 
+	 * @param hr - number of hours to add
+	 */
+	public void addHours(int hr){
+		hours+=hr;
+	}
+	
+	public void reduceHours(int hr){
+		hours-=hr;
 	}
 	
 	/**
