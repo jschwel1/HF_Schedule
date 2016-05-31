@@ -77,11 +77,14 @@ public class Base implements ActionListener{
 		f.setVisible(true);
 		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 //		window.add(pane);
 		
 		// add all the button and log with appropriate constraints
 		window.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 0;
+		c.weighty = 0;
 		
 		c.gridx = 0;
 		c.gridy = 0;
@@ -119,6 +122,7 @@ public class Base implements ActionListener{
 		c.gridy = 3;
 		window.add(run, c);
 		
+		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 4;
 		c.ipady = 200;
