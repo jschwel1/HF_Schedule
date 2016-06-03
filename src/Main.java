@@ -27,6 +27,7 @@ public class Main {
 	 */
 	public static void run(ArrayList<Trainee> tList, Shift[][] schedule) throws FileNotFoundException{
 		ArrayList<Trainee> list1 = new ArrayList<Trainee>();
+		ArrayList<Trainee> missingShift = new ArrayList<Trainee>();
 		Shift[][] shift = schedule;
 		String error = "The following trainees did not get at least one shift: ";
 		int loopCount = 0;
@@ -45,132 +46,73 @@ public class Main {
 		while (list1.size() > 0 && loopCount < 5){
 			int day;
 			int time;
-
-			// If the list is empty, make sure everyone has the correct # of 
-			// hours
-			if (list1.size() == 0){
-				loopCount++;
+			Trainee thisOne = list1.get(0);
+			
+			// If the trainee already has enough hours
+			if (thisOne.getHours() >= 6){
+				list1.remove(0);
+				continue;
+			}
+			
+			// if the trainee has already exhausted all his/her preferences
+			if (thisOne.getIter() == Trainee.NUM_PREFERENCES){
+				missingShift.add(thisOne);
+				thisOne.setIterator(0);
+				list1.remove(0);
+				continue;
+			}
+			// If still trying to place the Trainee
+			day = thisOne.getPrefDay();
+			time = thisOne.getPrefTime();
+			
+			// If no trainees exist on that shift yet
+			if (!shift[day][time].hasTrainee()){
+				shift[day][time].setTrainee(thisOne);
 				
-				error = "The following trainees did not get at least one shift: ";
-				for (int d = 0; d < 7; d++){
-					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-						Trainee temp;
-						
-						// if no Trainee, skip
-						if (!shift[d][t].hasTrainee()) continue;
-						temp = shift[d][t].getTrainee();
-						System.out.println(temp.getName() + " has " + temp.getHours() + " hours");
-						// if they have 6 hours, no problem
-						if (temp.getHours() == 6) continue;
-
-						// if they have 9 hours remove the 3-hour shift
-						else if (temp.getHours() == 9 && t != Shift.OVERNIGHT){
-							temp.reduceHours(3);
-							shift[d][t].setTrainee(null);
-						}
-						// if 12 hours (2 overnights) find the one they prefer least
-						else if (temp.getHours() == 12){
-							for (int p = Trainee.NUM_PREFERENCES-1; p >= 0; p--){
-								if (shift[temp.getPrefDay(p)][temp.getPrefTime(p)].hasTrainee()){
-									if (shift[temp.getPrefDay(p)][temp.getPrefTime(p)].getTrainee().equals(temp)){
-										shift[temp.getPrefDay(p)][temp.getPrefTime(p)].setTrainee(null);
-										temp.reduceHours(6);
-									}
-								}
-							}
-						}
-						else if (temp.getHours() < 6){
-							list1.add(temp);
-						}
-
-					}
-				}
-				continue;
-			}
-
-			// make sure the trainee hasn't gone through all preferences:
-			if (list1.get(0).getIter() == Trainee.NUM_PREFERENCES){
-				error+=list1.get(0).getName();
-				error+=", ";
+				if (time == Shift.OVERNIGHT) thisOne.addHours(6);
+				else thisOne.addHours(3);
+				
+				thisOne.nextChoice();
 				list1.remove(0);
 				continue;
 			}
-			day = list1.get(0).getPrefDay();
-			time = list1.get(0).getPrefTime();
-
-			// check if the first trainee in the queue's choice is taken
-			if (shift[day][time].hasTrainee()){
-				// if no preceptors on shift, go to priority
-				if (!shift[day][time].hasCCPrec() && !shift[day][time].hasDrPrec()){
-					// Trainee already on shift has a higher priority
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
-						list1.get(0).nextChoice();
-						continue;
-					}
-					// equal priorities, leave the one on shift and get the trainee's next preference
-					else if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
-						list1.get(0).nextChoice();
-						continue;
-					}
-					else{
-						list1.add(shift[day][time].getTrainee());
-						shift[day][time].setTrainee(list1.get(0));
-						list1.get(0).nextChoice();
-						list1.remove(0);
-					}
-				}
-				// If the trainee already there has a preceptor and the new 
-				// one doesn't, the original gets to keep it
-				else if (shift[day][time].getTrainee().hasPreceptor(shift[day][time]) > 0 
-						&& list1.get(0).hasPreceptor(shift[day][time]) == 0){
-					list1.get(0).nextChoice();
-					continue;
-				}
-				// if the new trainee can have a preceptor on this shift, and
-				// the one already there does't have one give it to the 
-				// precepting trainee.
-				else if (shift[day][time].getTrainee().hasPreceptor(shift[day][time]) == 0 
-						&& list1.get(0).hasPreceptor(shift[day][time]) > 0){
-
-					list1.add(shift[day][time].getTrainee());
-					shift[day][time].setTrainee(list1.get(0));
-					list1.get(0).nextChoice();
-					list1.remove(0);
-				}
-				// If both or neither can/will precept, go to priority
-				else{
-					if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0)) == 1){
-						list1.get(0).nextChoice();
-						continue;
-					}
-					else if (shift[day][time].getTrainee().hasHigherPriorityThan(list1.get(0))== -1){
-						list1.get(0).nextChoice();
-						continue;
-					}
-					else{
-						list1.add(shift[day][time].getTrainee());
-						shift[day][time].setTrainee(list1.get(0));
-						list1.get(0).nextChoice();
-						list1.remove(0);
-						continue;
-					}
-				}
-
+			// Work on replacing trainees.....
+			// If both trainees would have a preceptor or neither would
+			// have one, go to priority
+			if (((thisOne.hasPreceptor(shift[day][time]) == 0) 
+					&& shift[day][time].getTrainee().hasPreceptor(shift[day][time]) == 0)){
+				
 			}
-			else{
-				shift[day][time].setTrainee(list1.get(0));
-				list1.get(0).nextChoice();
-				list1.remove(0);
-				if (time == Shift.OVERNIGHT){
-					// remove it from the rest of the list so they only get one shift
-					list1.remove(shift[day][time]);
-
-				}
+			else if (((thisOne.hasPreceptor(shift[day][time]) > 0) 
+					&& shift[day][time].getTrainee().hasPreceptor(shift[day][time]) > 0)){
+				
 			}
-
+			// if thisOne would have a preceptor, but the other one wouldn't
+			// thisOne must replace the other one
+			else if (((thisOne.hasPreceptor(shift[day][time]) > 0) 
+					&& shift[day][time].getTrainee().hasPreceptor(shift[day][time]) == 0)){
+				
+			}
+			
+			// if thisOne would not have a preceptor, but the other one would,
+			// the other one would keep the shift
+			else if (((thisOne.hasPreceptor(shift[day][time]) == 0) 
+					&& shift[day][time].getTrainee().hasPreceptor(shift[day][time]) > 0)){
+				
+			}
+			
+			// all bases should be covered, but if something bad happens, just 
+			// leave everything and move thisOne to the next choice.
+			
+			
+			
+			
+			
+			
+			
 		}
-
-
+		// ======================= END OF ORGANIZATION ==================== //
+		// ======================= DISPLAY & SAVE RESULTS ================= //
 		// show error message in case someone did not make it onto the schedule
 		JOptionPane.showMessageDialog(null, error, "Trainees missing at least one shift:", JOptionPane.ERROR_MESSAGE);
 
