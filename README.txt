@@ -2,25 +2,7 @@
 
 
 
-#### SCHEDULING ALGORITH ####
-- Store all trainees in an arraylist (two copies of each)
-- As long as there is a trainee, loop through
--- If the trainee past his/her final choice, remove him/her from the list and continue
--- If there is no trainee in that trainees current preference, but him/her there, then take their next choice and continue
--- OTHERWISE
-	- If there are no preceptors on their current preferred, go to priority
-	- If there is only one trainee who would have a preceptor he/she gets it
-	- If they're both precepting, go to priority
--- Whenever placing a new trainee in a shift, if it's an overnight,
-	- remove any other instance of him/her from the list
-	- if replacing another trainee, also add him/her twice back into the list
-
-
-
-
-
-
-#### INSTRUCTIOSN FOR USE ####
+### INSTRUCTIOSN FOR USE ####
 - When the program is started, a window with some buttons and a text area will apear:
 	- "Add Trainee" -> Allows the user to create a new trainee by:
 		1) entering the name
@@ -50,7 +32,21 @@
 
 
 #### THINGS FOR FUTURE UPDATES ####
-- "Build Schedule" button should modify the existing schedule rather than start from scratch every time
 - Fix scheduling algorith
 
 #### UPDATES #####
+6/7/2016
+# Trainee.java
+- Added:
+	public int hasHigherPriorityThan(Trainee t, Shift s)
+
+# Shift.java
+- Added:
+	public void setTrainee(Trainee t, int s)
+	public void removeTrainee(int s)
+	public Trainee replaceTraineeWith(Trainee t, int s)
+- Modified:
+	BuildPreceptorSchedule() to modify currently selected schedule instead of starting from scratch
+
+# Main.java
+	Organization section is signficantly simpler; however, some modifications are still requried to check for more than the required number of hours and try to better include every trainee.

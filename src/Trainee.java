@@ -238,8 +238,8 @@ public class Trainee implements ActionListener{
 	 * 				   -1 -> They both have the same priority
 	 */
 	public int hasHigherPriorityThan(Trainee t){
-		int p1 = this.getIter()*(this.numSemesters()*2);
-		int p2 = t.getIter()*(t.numSemesters()/2);
+		int p1 = 5*this.getIter() + (this.numSemesters()*2);
+		int p2 = 5*t.getIter() + (t.numSemesters()*2);
 		
 		if (this.isCCPrecepting()) p1+= 5;
 		if (this.isDrPrecepting()) p1+= 5;
