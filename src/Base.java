@@ -46,6 +46,12 @@ public class Base implements ActionListener{
 		traineeList = new ArrayList<Trainee>();
 		schedule = new Shift[7][Trainee.SHIFTS_PER_DAY];
 		
+		for (int i = 0; i < 7; i++){
+			for (int j = 0; j < Trainee.SHIFTS_PER_DAY; j++){
+				schedule[i][j] = new Shift();
+			}
+		}
+		
 		/* Startup the GUI */
 		
 		log = new JTextArea();

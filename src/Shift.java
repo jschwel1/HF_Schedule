@@ -229,6 +229,7 @@ public class Shift{
 						break;
 					
 				}
+				box[d][t].setSelected(schedule[d][t].hasCCPrec());
 				c.gridx = d;
 				c.gridy = t+1;
 				window.add(box[d][t], c);
@@ -240,8 +241,8 @@ public class Shift{
 				if (e.getActionCommand().equals("Next")){
 					for (int d = 0; d < 7; d++){
 						for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-							schedule[d][t] = new Shift();
 							schedule[d][t].setCCPreceptor(box[d][t].isSelected());
+							box[d][t].setSelected(schedule[d][t].hasDrPrec());
 						}
 					}
 					submit.setActionCommand("Submit");
