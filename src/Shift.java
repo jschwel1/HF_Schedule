@@ -14,7 +14,8 @@ public class Shift{
 	boolean ccPrec;
 	Trainee trainee;
 	public static int OVERNIGHT = 0;
-	
+	public static int OVERNIGHT_HOURS = 6;
+	public static int SINGLE_SHIFT_HOURS = 3;
 	/**
 	 * Build a Shift object without any preceptors or Trainees
 	 */
@@ -95,6 +96,49 @@ public class Shift{
 	public void setTrainee(Trainee t){
 		trainee = t;
 	}
+	
+	/**
+	 * Sets the trainee and accounts for his/her additional hours
+	 * @param t - the Trainee to be placed on shift
+	 * @param s - the time slot of the shift
+	 */
+	public void setTrainee(Trainee t, int s){
+		this.setTrainee(t);
+		if(s == Shift.OVERNIGHT){
+			t.addHours(Shift.OVERNIGHT_HOURS);
+		}
+		else {
+			t.addHours(Shift.SINGLE_SHIFT_HOURS);
+		}
+	}
+	
+	/**
+	 * Removes the trainee from the shift
+	 * @param s - the time slot of the shift to reduce Trainee's hours
+	 */
+	public void removeTrainee(int s){
+		if(s == Shift.OVERNIGHT){
+			this.getTrainee().reduceHours(Shift.OVERNIGHT_HOURS);
+		}
+		else {
+			this.getTrainee().reduceHours(Shift.SINGLE_SHIFT_HOURS);
+		}
+		this.setTrainee(null);
+	}
+	
+	/**
+	 * Replaces the current trainee with a new one
+	 * @param t - the new trainee
+	 * @param s - the time slot to update the hours appropriately
+	 * @return - the old trainee
+	 */
+	public Trainee replaceTraineeWith(Trainee t, int s){
+		Trainee temp = this.getTrainee();
+		this.removeTrainee(s);
+		this.setTrainee(t, s);
+		return temp;
+	}
+	
 	/**
 	 * Gets the Trainee currently on shift
 	 * @return Trainee: the current trainee on shift (null if none)

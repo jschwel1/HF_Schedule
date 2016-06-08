@@ -67,12 +67,15 @@ public class Main {
 			
 			// If no trainees exist on that shift yet
 			if (!shift[day][time].hasTrainee()){
+				// put the trainee in
 				shift[day][time].setTrainee(thisOne);
-				
+				// give the trainee the correct number of hours
 				if (time == Shift.OVERNIGHT) thisOne.addHours(6);
 				else thisOne.addHours(3);
 				
+				// move the trainee to their next choice for future placesments
 				thisOne.nextChoice();
+				// remove the trainee from the list and continue
 				list1.remove(0);
 				continue;
 			}
@@ -103,7 +106,9 @@ public class Main {
 			
 			// all bases should be covered, but if something bad happens, just 
 			// leave everything and move thisOne to the next choice.
-			
+			else {
+				
+			}
 			
 			
 			

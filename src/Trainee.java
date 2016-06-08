@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 public class Trainee implements ActionListener{
 	public static final int NUM_PREFERENCES = 6;
 	public static final int SHIFTS_PER_DAY = 7;
+	public static final int REQUIRED_HOURS = 6;
+	
 	int prefDay[];
 	int prefTime[];
 	int iterator;
@@ -247,6 +249,25 @@ public class Trainee implements ActionListener{
 		if (p1 > p2) return 1;
 		if (p1 == p2) return -1;
 		return 0;
+	}
+	
+	/**
+	 * This version of hasHigherPriorityThan includes shifts to account for 
+	 * whether or not the trainee would be able to precept on a shift or not
+	 * and how how many ways he/she could precept
+	 * @param t - Trainee comparing to
+	 * @param s - Shift to determine priority for
+	 * @return - 1-> this Trainee has a higher priority
+	 * 			 0-> the other Trainee (t) has a higher priority
+	 * 			-1-> they have the same priority
+	 */
+	public int hasHigherPriorityThan(Trainee t, Shift s){
+		int p1 = ((5*this.hasPreceptor(s)) + (2*this.numSemesters()) + (3*this.getIter()));
+		int p2 = ((5*t.hasPreceptor(s)) + (2*t.numSemesters()) + (3*t.getIter()));
+		
+		if (p1 > p2) return 1;
+		if (p2 > p1) return 0;
+		else return -1;
 	}
 
 	/**
