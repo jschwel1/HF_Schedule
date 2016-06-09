@@ -42,11 +42,27 @@ public class Main {
 		
 		
 		// fill schedule with first-shifts
-		while (list1.size() > 0 && loopCount < 5){
+		while (list1.size() > 0 || loopCount < 5){
 			int day;
 			int time;
-			Trainee thisOne = list1.get(0);
+			Trainee thisOne;
 			
+			
+			if (list1.size() == 0){
+				if (missingShift.size() == 0) break;
+				
+				loopCount++;
+				list1.addAll(missingShift);
+				missingShift.clear();
+				
+				for (Trainee t: list1){
+					t.setIterator(0);
+				}
+				
+				continue;
+			}
+			
+			thisOne = list1.get(0);
 			
 			// If the trainee has enough hours, remove him/her from the list
 			if (thisOne.getHours() >= Trainee.REQUIRED_HOURS){
@@ -82,6 +98,7 @@ public class Main {
 			else{
 				list1.add(shift[day][time].replaceTraineeWith(thisOne, time));
 				list1.remove(0);
+				continue;
 			}	
 			
 			
