@@ -273,7 +273,7 @@ public class Base implements ActionListener{
 		// UPDATE LOG
 		log.setText("Schedule File: " + scheduleFile + "\n\nTrainees:\n");
 		for (int i = 0; i < traineeList.size(); i++){
-			log.append("("+i+") " + traineeList.get(i).toString() + "\n\n");
+			log.append("("+i+") " + traineeList.get(i).print() + "\n\n");
 		}
 		
 	}

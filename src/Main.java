@@ -73,7 +73,6 @@ public class Main {
 			// If the tainee exhausted all preferences
 			if (thisOne.getIter() == Trainee.NUM_PREFERENCES){
 				missingShift.add(thisOne);
-				error += thisOne.getName() + ", ";
 				list1.remove(0);
 				continue;
 			}
@@ -101,8 +100,13 @@ public class Main {
 				continue;
 			}	
 			
-			
 		}
+		
+		for (Trainee t: missingShift){
+			error+= t.getName() + ", ";
+		}
+		
+		
 		// ======================= END OF ORGANIZATION ==================== //
 		// ======================= DISPLAY & SAVE RESULTS ================= //
 		// show error message in case someone did not make it onto the schedule

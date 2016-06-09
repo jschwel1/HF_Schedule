@@ -262,9 +262,24 @@ public class Trainee implements ActionListener{
 	 * 			-1-> they have the same priority
 	 */
 	public int hasHigherPriorityThan(Trainee t, Shift s){
-		int p1 = ((4*this.hasPreceptor(s)) + (2*this.numSemesters()) + (7*this.getIter()));
-		int p2 = ((4*t.hasPreceptor(s)) + (2*t.numSemesters()) + (7*t.getIter()));
+		// Semesters in is not as important as precepting and the prefernce 
+		// number the trainee is on becomes exponentially more important
+		int numPrec, numSem, choice;
+		int p1, p2;
 		
+		// get numbers from this trainee
+		numPrec = this.hasPreceptor(s);
+		numSem = this.numSemesters();
+		choice = this.getIter()+1;
+		p1 = (numPrec * 4) + (numSem * 2)  + (choice * choice);
+		
+		// get numbers for the trainee passed as parameter
+		numPrec = t.hasPreceptor(s);
+		numSem = t.numSemesters();
+		choice = t.getIter()+1;
+		p2 = (numPrec * 4) + (numSem * 2)  + (choice * choice);
+		
+		// return the appropriate value
 		if (p1 > p2) return 1;
 		if (p2 > p1) return 0;
 		else return -1;
@@ -336,6 +351,74 @@ public class Trainee implements ActionListener{
 		return s;
 	}
 
+	
+	public String print(){
+		String s = this.getName() + "\n";
+		
+		for (int i = 0; i < Trainee.NUM_PREFERENCES; i++){
+			switch (this.getPrefDay(i)){
+				case 0:
+					s+="Su";
+					break;
+				case 1:
+					s+="Mo";
+					break;
+				case 2:
+					s+="Tu";
+					break;
+				case 3:
+					s+="We";
+					break;
+				case 4:
+					s+="Th";
+					break;
+				case 5:
+					s+="Fr";
+					break;
+				case 6:
+					s+="Sa";
+					break;
+			}
+
+			s += " (";
+			
+			switch (this.getPrefTime(i)){
+				case 0:
+					s+="0000";
+					break;
+				case 1:
+					s+="0600";
+					break;
+				case 2:
+					s+="0900";
+					break;
+				case 3:
+					s+="1200";
+					break;
+				case 4:
+					s+="1500";
+					break;
+				case 5:
+					s+="1800";
+					break;
+				case 6:
+					s+="2100";
+					break;
+					
+			}
+			
+			s+="), ";
+		}
+
+		
+		if (ccPrec) s+= "\nCC, ";
+		
+		if (drPrec) s+= "Dr, ";
+		
+		s+=semesters + " Semesters";
+		return s;
+	}
+	
 	/**
 	 * A GUI system to help build a trainee 
 	 */
