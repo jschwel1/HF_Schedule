@@ -297,6 +297,81 @@ public class Shift{
 	}
 	
 	/**
+	 * Opens a schedule (Matrix of Shifts)
+	 * @param s - a Scanner set to read from the file
+	 * @return Shift[][] - The schedule
+	 */
+	public static Shift[][] openSchedule(Scanner s){
+		
+		Shift[][] schedule = new Shift[7][Trainee.SHIFTS_PER_DAY];
+		
+		try {
+			String str;
+			for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+				for (int d = 0; d < 7; d++){	
+					schedule[d][t] = new Shift();
+					str = s.next();
+					if (str.charAt(0) == 'y') schedule[d][t].setCCPreceptor(true);
+					else schedule[d][t].setCCPreceptor(false);
+					System.out.println("("+d+", "+t+") -> " + str);
+				}
+			}
+			for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+				for (int d = 0; d < 7; d++){	
+					str = s.next();
+					if (str.charAt(0) == 'y') schedule[d][t].setDrPreceptor(true);
+					else schedule[d][t].setDrPreceptor(false);
+					System.out.println("("+d+", "+t+") -> \"" + str+"\"");
+				}
+			}
+			Shift.showPreceptorSchedule(schedule);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error Reading File");
+			for (int i = 0; i < 7; i++){
+				for (int j = 0; j < Trainee.SHIFTS_PER_DAY; j++){
+					schedule[i][j] = new Shift();
+				}
+			}
+		}
+		
+		return schedule;
+	}
+	
+	/**
+	 * Saves a matrix of Shifts
+	 * @param schedule - the matrix of Shifts
+	 * @param f - The File destination
+	 */
+	public static void saveSchedule(Shift[][] schedule, File f){
+		PrintWriter writer;
+		
+		try {
+			writer = new PrintWriter(f);
+			for (int d = 0; d < 7; d++){
+				for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+					if(schedule[d][t].hasCCPrec()) writer.print("y ");
+					else writer.print("n ");
+				}
+				writer.println();
+			}
+			writer.println();
+			for (int d = 0; d < 7; d++){
+				for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
+					if(schedule[d][t].hasDrPrec()) writer.print("y ");
+					else writer.print("n ");
+				}
+				writer.println();
+			}
+			writer.close();
+		} catch (FileNotFoundException e1) {
+			
+			JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
+		}
+	}
+	
+	
+	
+	/**
 	 * Displays the weekly schedule with Trainee names in the appropriate spots
 	 * @param schedule - The matrix of Shift objects to read the names from
 	 */
@@ -363,74 +438,9 @@ public class Shift{
 				System.out.println("Adding ("+d+", "+t+")");
 			}
 		}
+		frame.setVisible(true);
 	}
-	
-	
-	public static Shift[][] openSchedule(Scanner s){
-		
-		Shift[][] schedule = new Shift[7][Trainee.SHIFTS_PER_DAY];
-		
-		try {
-			String str;
-			for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-				for (int d = 0; d < 7; d++){	
-					schedule[d][t] = new Shift();
-					str = s.next();
-					if (str.charAt(0) == 'y') schedule[d][t].setCCPreceptor(true);
-					else schedule[d][t].setCCPreceptor(false);
-					System.out.println("("+d+", "+t+") -> " + str);
-				}
-			}
-			for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-				for (int d = 0; d < 7; d++){	
-					str = s.next();
-					if (str.charAt(0) == 'y') schedule[d][t].setDrPreceptor(true);
-					else schedule[d][t].setDrPreceptor(false);
-					System.out.println("("+d+", "+t+") -> \"" + str+"\"");
-				}
-			}
-			Shift.showPreceptorSchedule(schedule);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error Reading File");
-			for (int i = 0; i < 7; i++){
-				for (int j = 0; j < Trainee.SHIFTS_PER_DAY; j++){
-					schedule[i][j] = new Shift();
-				}
-			}
-		}
-		
-		return schedule;
-	}
-	
-	public static void saveSchedule(Shift[][] schedule, File f){
-		PrintWriter writer;
-		
-		try {
-			writer = new PrintWriter(f);
-			for (int d = 0; d < 7; d++){
-				for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-					if(schedule[d][t].hasCCPrec()) writer.print("y ");
-					else writer.print("n ");
-				}
-				writer.println();
-			}
-			writer.println();
-			for (int d = 0; d < 7; d++){
-				for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-					if(schedule[d][t].hasDrPrec()) writer.print("y ");
-					else writer.print("n ");
-				}
-				writer.println();
-			}
-			writer.close();
-		} catch (FileNotFoundException e1) {
-			
-			JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
-		}
-	}
-	
-	
-	
+
 	/**
 	 * Displays a window with a weekly schedule of when what preceptors will be on shifts
 	 * @param schedule - Matrix of Shifts to read the values from
@@ -502,6 +512,8 @@ public class Shift{
 				window.add(blocks[d][t], c);
 			}
 		}
+		
+		frame.setVisible(true);
 	}
 
 

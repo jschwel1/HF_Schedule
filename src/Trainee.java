@@ -554,7 +554,11 @@ public class Trainee implements ActionListener{
 		return n;
 	}
 	
-	
+	/**
+	 * Saves a list of trainees to a file
+	 * @param traineeList - the list of Trainees
+	 * @param f - File destination
+	 */
 	public static void saveTraineeList(ArrayList<Trainee> traineeList, File f){
 		PrintWriter writer;
 		try {
@@ -572,6 +576,12 @@ public class Trainee implements ActionListener{
 		}
 	}
 	
+	/**
+	 * Opens a list of trainees
+	 * @param s - a Scanner set to read the file where the Trainees are stored
+	 * @return ArrayList<Trainee> - an ArrayList containing all the trainees
+	 * 								from the file
+	 */
 	public static ArrayList<Trainee> openTraineeList(Scanner s){
 		ArrayList<Trainee> traineeList = new ArrayList<Trainee>();
 		
