@@ -32,8 +32,7 @@
 
 
 #### THINGS FOR FUTURE UPDATES ####
-- Fix scheduling algorith
-- Move functions to appropriate classes (saving and opening files in Base.java as well as at the end of Main.run();
+- Fix scheduling algorithm
 
 #### UPDATES #####
 6/7/2016
