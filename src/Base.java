@@ -39,7 +39,7 @@ public class Base implements ActionListener{
 	public Base(){
 		JFrame f = new JFrame("Main Jawn");
 		Container window = f.getContentPane();
-		JScrollPane pane = new JScrollPane();
+		JScrollPane pane;
 		GridBagConstraints c = new GridBagConstraints();
 		scheduleFile = "";
 		/* Initialize Trainee list and schedule variables */
@@ -83,8 +83,11 @@ public class Base implements ActionListener{
 		f.setVisible(true);
 		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
-//		window.add(pane);
+		
+		
+		pane = new JScrollPane(log);
+		pane.setVisible(true);
+		window.add(pane);
 		
 		// add all the button and log with appropriate constraints
 		window.setLayout(new GridBagLayout());
@@ -136,7 +139,11 @@ public class Base implements ActionListener{
 		c.weighty = 1;
 		c.gridwidth = 3;
 		c.gridheight = 2;
-		window.add(log, c);
+		window.add(pane,c);
+		
+		
+		// ensures everything in the JFrame shows up
+		f.setVisible(true);
 
 	}
 
