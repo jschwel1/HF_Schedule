@@ -50,3 +50,9 @@
 
 # Main.java
 	Organization section is signficantly simpler; however, some modifications are still requried to check for more than the required number of hours and try to better include every trainee.
+
+6/9/2016
+# All files
+- Several changes made as noted in the commit notes
+
+
