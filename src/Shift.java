@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -293,6 +292,7 @@ public class Shift{
 			}
 		});
 		
+		frame.setVisible(true);
 		
 	}
 	
@@ -384,7 +384,7 @@ public class Shift{
 		GridBagConstraints c;
 		
 		frame.setVisible(true);
-		frame.setSize(700,700);
+		frame.setSize(750,700);
 	
 		
 		window.setLayout(new GridBagLayout());
@@ -439,6 +439,7 @@ public class Shift{
 			}
 		}
 		frame.setVisible(true);
+		frame.revalidate();
 	}
 
 	/**
@@ -454,7 +455,7 @@ public class Shift{
 		GridBagConstraints c;
 		
 		frame.setVisible(true);
-		frame.setSize(500,500);
+		frame.setSize(600,500);
 		
 		
 		window.setLayout(new GridBagLayout());
@@ -512,12 +513,8 @@ public class Shift{
 				window.add(blocks[d][t], c);
 			}
 		}
-		
 		frame.setVisible(true);
+		frame.revalidate();
 	}
 
-
-	
-	
-	
 }

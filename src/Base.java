@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -79,7 +78,7 @@ public class Base implements ActionListener{
 		refreshButton.addActionListener(this);
 		removeTrainee.addActionListener(this);
 		// set JFrame stuff
-		f.setSize(430,400);
+		f.setSize(475,400);
 		f.setVisible(true);
 		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -213,17 +212,13 @@ public class Base implements ActionListener{
 		}
 		else if (e.getSource() == saveTraineeList){
 			JFileChooser fc = new JFileChooser("Save trainee list");
-			fc.setDialogTitle("Save Trainee List");
-			PrintWriter writer;
-			
+			fc.setDialogTitle("Save Trainee List");			
 			fc.showSaveDialog(null);
 			Trainee.saveTraineeList(traineeList, fc.getSelectedFile());
 		}
 		else if (e.getSource() == saveSchedule){
 			JFileChooser fc = new JFileChooser("Save Schedule");
-			fc.setDialogTitle("Save Preceptor Schedule");
-			PrintWriter writer;
-			
+			fc.setDialogTitle("Save Preceptor Schedule");			
 			fc.showSaveDialog(null);
 			try {
 				Shift.saveSchedule(schedule, fc.getSelectedFile());

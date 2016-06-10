@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -481,7 +480,7 @@ public class Trainee implements ActionListener{
 		// set up the JFrame and Container with a GridBagLayout
 		frame.setVisible(true);
 		frame.setVisible(true);
-		frame.setSize(800,600);
+		frame.setSize(800,400);
 		frame.setLocationRelativeTo(null);
 		window.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -538,6 +537,7 @@ public class Trainee implements ActionListener{
 			ccPrecepting.setSelected(this.isCCPrecepting());
 			drPrecepting.setSelected(this.isDrPrecepting());
 		}
+		frame.setVisible(true);
 	}
 	
 	/**
@@ -655,7 +655,4 @@ public class Trainee implements ActionListener{
 			}
 		}
 	}
-	
-	
-	
 }
