@@ -3,7 +3,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -16,6 +19,7 @@ public class Trainee implements ActionListener{
 	public static final int NUM_PREFERENCES = 6;
 	public static final int SHIFTS_PER_DAY = 7;
 	public static final int REQUIRED_HOURS = 6;
+	private static final int NOT_SET = 999;
 	
 	int prefDay[];
 	int prefTime[];
@@ -42,6 +46,12 @@ public class Trainee implements ActionListener{
 		prefTime = new int[NUM_PREFERENCES];
 		iterator = 0;
 		hours = 0;
+		name = "";
+		
+		for (int i = 0; i < Trainee.NUM_PREFERENCES; i++){
+			prefDay[i] = Trainee.NOT_SET;
+			prefTime[i] = Trainee.NOT_SET;
+		}
 	}
 	/**
 	 * Initialize a new Trainee from a file (organized by save function in Base.java--should be moved eventually
@@ -470,7 +480,7 @@ public class Trainee implements ActionListener{
 		// set up the JFrame and Container with a GridBagLayout
 		frame.setVisible(true);
 		frame.setVisible(true);
-		frame.setSize(800,600);
+		frame.setSize(800,400);
 		frame.setLocationRelativeTo(null);
 		window.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -511,6 +521,23 @@ public class Trainee implements ActionListener{
 				window.add(shiftButton[d][t], c);
 			}
 		}
+		
+		//update values to match trainee's
+		if (!name.equals("")){
+			iterator = 0;
+			for (int i = 0; i < Trainee.NUM_PREFERENCES; i++){
+				if (prefDay[i] != Trainee.NOT_SET && prefTime[i] != Trainee.NOT_SET){
+					System.out.println("Preference #" + i + "is at d:" + prefDay[i] + " t:"+prefTime[i]);
+					shiftButton[prefDay[i]+1][prefTime[i]+1].setText(i+1+ "");
+					iterator++;
+				}
+			}
+			nameInput.setText(this.getName());
+			semesterInput.setText(""+this.numSemesters());
+			ccPrecepting.setSelected(this.isCCPrecepting());
+			drPrecepting.setSelected(this.isDrPrecepting());
+		}
+		frame.setVisible(true);
 	}
 	
 	/**
@@ -525,6 +552,48 @@ public class Trainee implements ActionListener{
 		if (s.hasDrPrec() && this.isDrPrecepting()) n++;
 		
 		return n;
+	}
+	
+	/**
+	 * Saves a list of trainees to a file
+	 * @param traineeList - the list of Trainees
+	 * @param f - File destination
+	 */
+	public static void saveTraineeList(ArrayList<Trainee> traineeList, File f){
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(f);
+		
+			for (int i = 0; i < traineeList.size(); i++){
+				writer.println(traineeList.get(i).getName());
+				writer.println(traineeList.get(i).getInfo());
+			}
+			writer.close();
+			
+		} catch (FileNotFoundException e1) {
+			
+			JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
+		}
+	}
+	
+	/**
+	 * Opens a list of trainees
+	 * @param s - a Scanner set to read the file where the Trainees are stored
+	 * @return ArrayList<Trainee> - an ArrayList containing all the trainees
+	 * 								from the file
+	 */
+	public static ArrayList<Trainee> openTraineeList(Scanner s){
+		ArrayList<Trainee> traineeList = new ArrayList<Trainee>();
+		
+		try {
+			while (s.hasNext()){
+				traineeList.add(new Trainee(s));
+			}
+		} catch (FileNotFoundException e1) {
+			JOptionPane.showMessageDialog(null, "Error Reading File" );
+		}
+			
+		return traineeList;
 	}
 	
 	
@@ -586,7 +655,4 @@ public class Trainee implements ActionListener{
 			}
 		}
 	}
-	
-	
-	
 }

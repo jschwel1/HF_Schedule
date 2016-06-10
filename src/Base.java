@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -39,7 +38,7 @@ public class Base implements ActionListener{
 	public Base(){
 		JFrame f = new JFrame("Main Jawn");
 		Container window = f.getContentPane();
-		JScrollPane pane = new JScrollPane();
+		JScrollPane pane;
 		GridBagConstraints c = new GridBagConstraints();
 		scheduleFile = "";
 		/* Initialize Trainee list and schedule variables */
@@ -56,7 +55,7 @@ public class Base implements ActionListener{
 		
 		log = new JTextArea();
 		run = new JButton("Run");
-		addTrainee = new JButton("Add Trainee");
+		addTrainee = new JButton("Add/Modify Trainee");
 		openTraineeList = new JButton("Open Trainee List");
 		openSchedule = new JButton("Open Schedule");
 		buildSchedule = new JButton("Build Schedule");
@@ -79,17 +78,20 @@ public class Base implements ActionListener{
 		refreshButton.addActionListener(this);
 		removeTrainee.addActionListener(this);
 		// set JFrame stuff
-		f.setSize(400,400);
+		f.setSize(475,400);
 		f.setVisible(true);
 		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
-//		window.add(pane);
+		
+		
+		pane = new JScrollPane(log);
+		pane.setVisible(true);
+		window.add(pane);
 		
 		// add all the button and log with appropriate constraints
 		window.setLayout(new GridBagLayout());
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 0;
+		c.weightx = 0.5;
 		c.weighty = 0;
 		
 		c.gridx = 0;
@@ -132,11 +134,15 @@ public class Base implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 4;
 		c.ipady = 200;
-		c.weightx = 1;
+		c.weightx = .5;
 		c.weighty = 1;
 		c.gridwidth = 3;
 		c.gridheight = 2;
-		window.add(log, c);
+		window.add(pane,c);
+		
+		
+		// ensures everything in the JFrame shows up
+		f.setVisible(true);
 
 	}
 
@@ -152,10 +158,16 @@ public class Base implements ActionListener{
 			}
 		}
 		else if (e.getSource() == addTrainee){
-			log.append("New Trainee\n");
-			traineeList.add(new Trainee());
-			traineeList.get(traineeList.size()-1).GUIBuild();
-
+			String[] options = {"Add New", "Modify Existing" };
+			int response =JOptionPane.showOptionDialog(null, "What would you like to do?", "Add new or Modify Existing Trainee", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]); 
+			if ( response == JOptionPane.YES_OPTION){
+				traineeList.add(new Trainee());
+				traineeList.get(traineeList.size()-1).GUIBuild();
+			}
+			else if (response == JOptionPane.NO_OPTION){
+				int num = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number next to the trainee you wish to modify", "Modify Existing Trainee", JOptionPane.OK_CANCEL_OPTION));
+				traineeList.get(num).GUIBuild();
+			}
 			
 		}
 		else if (e.getSource() == openTraineeList){
@@ -168,9 +180,8 @@ public class Base implements ActionListener{
 				file = fc.getSelectedFile();
 				try {
 					s = new Scanner(file);
-					while (s.hasNext()){
-						traineeList.add(new Trainee(s));
-					}
+					traineeList.addAll(Trainee.openTraineeList(s));
+					
 				} catch (FileNotFoundException e1) {
 					JOptionPane.showMessageDialog(null, "Could not read file: " + file.getName());
 				}
@@ -187,24 +198,7 @@ public class Base implements ActionListener{
 				file = fc.getSelectedFile();
 				try {
 					s = new Scanner(file);
-					String str;
-					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-						for (int d = 0; d < 7; d++){	
-							schedule[d][t] = new Shift();
-							str = s.next();
-							if (str.charAt(0) == 'y') schedule[d][t].setCCPreceptor(true);
-							else schedule[d][t].setCCPreceptor(false);
-							System.out.println("("+d+", "+t+") -> " + str);
-						}
-					}
-					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-						for (int d = 0; d < 7; d++){	
-							str = s.next();
-							if (str.charAt(0) == 'y') schedule[d][t].setDrPreceptor(true);
-							else schedule[d][t].setDrPreceptor(false);
-							System.out.println("("+d+", "+t+") -> \"" + str+"\"");
-						}
-					}
+					schedule = Shift.openSchedule(s);
 					Shift.showPreceptorSchedule(schedule);
 					scheduleFile=fc.getSelectedFile().getName();
 				} catch (FileNotFoundException e1) {
@@ -218,51 +212,18 @@ public class Base implements ActionListener{
 		}
 		else if (e.getSource() == saveTraineeList){
 			JFileChooser fc = new JFileChooser("Save trainee list");
-			fc.setDialogTitle("Save Trainee List");
-			PrintWriter writer;
-			
+			fc.setDialogTitle("Save Trainee List");			
 			fc.showSaveDialog(null);
-			try {
-				writer = new PrintWriter(fc.getSelectedFile());
-			
-				for (int i = 0; i < traineeList.size(); i++){
-					writer.println(traineeList.get(i).getName());
-					writer.println(traineeList.get(i).getInfo());
-				}
-				writer.close();
-				
-			} catch (FileNotFoundException e1) {
-				
-				JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
-			}
+			Trainee.saveTraineeList(traineeList, fc.getSelectedFile());
 		}
 		else if (e.getSource() == saveSchedule){
 			JFileChooser fc = new JFileChooser("Save Schedule");
-			fc.setDialogTitle("Save Preceptor Schedule");
-			PrintWriter writer;
-			
+			fc.setDialogTitle("Save Preceptor Schedule");			
 			fc.showSaveDialog(null);
 			try {
-				writer = new PrintWriter(fc.getSelectedFile());
-				for (int d = 0; d < 7; d++){
-					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-						if(schedule[d][t].hasCCPrec()) writer.print("y ");
-						else writer.print("n ");
-					}
-					writer.println();
-				}
-				writer.println();
-				for (int d = 0; d < 7; d++){
-					for (int t = 0; t < Trainee.SHIFTS_PER_DAY; t++){
-						if(schedule[d][t].hasDrPrec()) writer.print("y ");
-						else writer.print("n ");
-					}
-					writer.println();
-				}
+				Shift.saveSchedule(schedule, fc.getSelectedFile());
 				scheduleFile=fc.getSelectedFile().getName();
-				writer.close();
-			} catch (FileNotFoundException e1) {
-				
+			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
 			}
 		}
