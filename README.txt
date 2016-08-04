@@ -34,7 +34,10 @@
 #### THINGS FOR FUTURE UPDATES ####
 - Update scheduling algorithm to give higher priorities to trainees with a 3-hr shift right before or after the current shift.
 - Add a KeyListener to make it quicker to run the buttons on the Base()
-
+- Make the preceptor schedule builder look better.
+- When the schedule is being built, can a save button be put in? If so, that might be nicer than having it pop up immediately. Also if all trainees got onto the schedule, there's no real need for the warning message.
+- Automatically save the Trainee and Schedule files with a specific filetype (.txt or a custom one).
+- On final schedule (or when saving), put a D, C, or B next to Trainee's name to show what he/she will be able to precept.
 #### UPDATES #####
 6/7/2016
 # Trainee.java
