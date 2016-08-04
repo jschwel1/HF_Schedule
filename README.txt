@@ -33,6 +33,7 @@
 
 #### THINGS FOR FUTURE UPDATES ####
 - Update scheduling algorithm to give higher priorities to trainees with a 3-hr shift right before or after the current shift.
+- Add a KeyListener to make it quicker to run the buttons on the Base()
 
 #### UPDATES #####
 6/7/2016
