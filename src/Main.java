@@ -1,3 +1,13 @@
+/*
+ * File: Main.java
+ * Last Modified: 08/02/2016
+ * Written by: Jacob Schwell
+ * Description: This file combines the other three. Upon start-up, the main 
+ * 				function only creates a Base object. If the user wants  to
+ * 				organize the Trainees in, the function to do that--run--is also
+ * 				in this file since it utilizes multiple other files.
+ */
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -41,6 +51,9 @@ public class Main {
 		
 		
 		// fill schedule with first-shifts
+		/* 	loopCount < 5 -> 5 is an arbitrary number essentially. It is used in
+			the event that switching trainees farther down the arraylist opened
+			up a spot for one that had previously not been able to get a shift. */
 		while (list1.size() > 0 || loopCount < 5){
 			int day;
 			int time;

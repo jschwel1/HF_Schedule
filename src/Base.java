@@ -1,3 +1,16 @@
+/*
+ * File: Base.java
+ * Last Modified: 08/02/2016
+ * Written by: Jacob Schwell
+ * Description: This file is the hold the main GUI. When the program starts up,
+ * 				it creates an instance of this class so the user can utilize 
+ * 				this program and do stuff. Each button is labeled with a 
+ * 				description of what it does and has an action listener to run
+ * 				it's corresponding function. The GUI is built in the constructor
+ * 				and the buttons are all run through actionPerformed().
+ */
+
+
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

@@ -1,4 +1,19 @@
- import java.awt.Container;
+/* File: Trainee.java
+ * Last modified: 8/2/2016
+ * Written by: Jacob Schwell
+ * Description: The Trainee class creates an object that acts as a trainee in
+ * 				Harpur's Ferry. Each one has an arrray of prefered shifts 
+ * 				separated into two--one for day of the week and one for time of 
+ * 				day. The Trainee's iterator holds the position in the array of 
+ * 				the next preferred shift (for when the the shifts are organized)
+ * 				the boolean ccPrec and drPrec indicate whether or not the 
+ * 				specific trainee is precepting to be a crew chief or driver, 
+ * 				respectively. Other variables should be explanatory by name; 
+ * 				however, feel free to contact me if any questions arise.
+ * 
+ */
+
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;

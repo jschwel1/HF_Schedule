@@ -1,3 +1,29 @@
+/*
+ * File: Shift.java
+ * Last Modified: 08/02/2016
+ * Written by: Jacob Schwell
+ * Description: This shift holds a template for an individual shift at Harpur's
+ * 				Ferry and methods to modify various aspects of one. Although
+ * 				this file contains methods to modify a specific object, it also
+ * 				contains some static methods that work on multiple Shift objects
+ * 				to make up a weekly schedule. 
+ * 				
+ * 				Similar to the Trainee class, this one also contains variables 
+ * 				drPrec and ccPrec; however, the meanings are different. As, 
+ * 				hopefully, likely expected, they show if there is a preceptor 
+ * 				on the shift, rather than say if the trainee is precepting.
+ * 
+ *  			Other global variables include OVERNIGHT, OVERNIGHT_HOURS, and 
+ *  			SINGLE_SHIFT_HOURS. These are important in the event the a shift
+ *  			change happens in the future, to require fewer changes in the 
+ *  			code. OVERNIGHT is 0, showing that the overnight is at position
+ *  			0 in the time array in the shift matrix (the weekly schedule). 
+ *  			OVERNIGHT_HOURS is essentially just double SINGLE_SHIFT_HOURS
+ *  			and both are used to count hours the the trainee is covering.
+ *  
+ *  							
+ */
+
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

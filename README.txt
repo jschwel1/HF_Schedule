@@ -32,7 +32,7 @@
 
 
 #### THINGS FOR FUTURE UPDATES ####
-- Fix scheduling algorithm
+- Update scheduling algorithm to give higher priorities to trainees with a 3-hr shift right before or after the current shift.
 
 #### UPDATES #####
 6/7/2016
@@ -55,4 +55,6 @@
 # All files
 - Several changes made as noted in the commit notes
 
-
+8/4/2016
+# All files
+- Brief descriptions about each file.
