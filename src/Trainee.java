@@ -484,13 +484,13 @@ public class Trainee implements ActionListener{
 		shiftButton[6][0] = new JButton("Friday");
 		shiftButton[7][0] = new JButton("Saturday");
 		
-		shiftButton[0][1] = new JButton("0000");
-		shiftButton[0][2] = new JButton("0600");
-		shiftButton[0][3] = new JButton("0900");
-		shiftButton[0][4] = new JButton("1200");
-		shiftButton[0][5] = new JButton("1500");
-		shiftButton[0][6] = new JButton("1800");
-		shiftButton[0][7] = new JButton("2100");
+		shiftButton[0][1] = new JButton("0000 - 0600");
+		shiftButton[0][2] = new JButton("0600 - 0900");
+		shiftButton[0][3] = new JButton("0900 - 1200");
+		shiftButton[0][4] = new JButton("1200 - 1500");
+		shiftButton[0][5] = new JButton("1500 - 1800");
+		shiftButton[0][6] = new JButton("1800 - 2100");
+		shiftButton[0][7] = new JButton("2100 - 0000");
 		
 		// set up the JFrame and Container with a GridBagLayout
 		frame.setVisible(true);
