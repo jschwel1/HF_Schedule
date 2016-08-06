@@ -16,6 +16,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class Base implements ActionListener{
+public class Base implements ActionListener, KeyListener{
 	JButton run;
 	JButton addTrainee;
 	JButton openTraineeList;
@@ -65,7 +67,7 @@ public class Base implements ActionListener{
 		}
 		
 		/* Startup the GUI */
-		
+		f.addKeyListener(this);
 		log = new JTextArea();
 		run = new JButton("Run");
 		addTrainee = new JButton("Add/Modify Trainee");
@@ -249,6 +251,57 @@ public class Base implements ActionListener{
 		for (int i = 0; i < traineeList.size(); i++){
 			log.append("("+i+") " + traineeList.get(i).print() + "\n\n");
 		}
+		
+	}
+
+	public void keyPressed(KeyEvent e) {
+		
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		switch(key){
+			case KeyEvent.VK_A:
+				String[] options = {"Add New", "Modify Existing" };
+				int response =JOptionPane.showOptionDialog(null, "What would you like to do?", "Add new or Modify Existing Trainee", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]); 
+				if ( response == JOptionPane.YES_OPTION){
+					traineeList.add(new Trainee());
+					traineeList.get(traineeList.size()-1).GUIBuild();
+				}
+				else if (response == JOptionPane.NO_OPTION){
+					int num = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number next to the trainee you wish to modify", "Modify Existing Trainee", JOptionPane.OK_CANCEL_OPTION));
+					traineeList.get(num).GUIBuild();
+				}
+				break;
+			case KeyEvent.VK_B:
+				Shift.buildPreceptorSchedule(schedule);
+				break;
+			case KeyEvent.VK_R:
+				break;
+			case KeyEvent.VK_Q:
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?") == JOptionPane.YES_OPTION){
+					System.exit(1);
+				}
+				break;
+			case KeyEvent.VK_G:
+				try {
+					Main.run(traineeList, schedule);
+				} catch (FileNotFoundException e1) {
+					JOptionPane.showMessageDialog(null, "Uh oh! Something bad happened...");
+				}
+				break;
+				
+		}
+		
+		// UPDATE LOG
+		log.setText("Schedule File: " + scheduleFile + "\n\nTrainees:\n");
+		for (int i = 0; i < traineeList.size(); i++){
+			log.append("("+i+") " + traineeList.get(i).print() + "\n\n");
+		}
+	}
+	
+	public void keyTyped(KeyEvent e) {
 		
 	}
 }
