@@ -28,8 +28,12 @@
 		   the trainees
 		** Note: After running, A window will pop-up to allow the user to save the schedule as a
 			 .csv file, which can be opened in Excel. 
-
-
+- Key Commands from base:
+	- A or a -> Add or modify Trainee
+	- B or b -> Build or edit preceptor schedule	
+	- R or r -> Refresh info log
+	- Q or q -> Quit program
+	- G or g -> Run the scheduling program
 
 #### THINGS FOR FUTURE UPDATES ####
 - Update scheduling algorithm to give higher priorities to trainees with a 3-hr shift right before or after the current shift.
@@ -62,3 +66,7 @@
 8/4/2016
 # All files
 - Brief descriptions about each file.
+
+8/6/2016
+#Base.java
+- Added key commands to work along with the buttons
