@@ -12,6 +12,7 @@
 
 
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -50,7 +51,7 @@ public class Base implements ActionListener, KeyListener{
 	 * options to add trainees, build schedules, open and save files of trainee 
 	 * lists or preceptor schedules and run the trainee sort.
 	 */
-	public Base(){
+	public Base() {
 		JFrame f = new JFrame("Main Jawn");
 		Container window = f.getContentPane();
 		JScrollPane pane;
@@ -67,7 +68,6 @@ public class Base implements ActionListener, KeyListener{
 		}
 		
 		/* Startup the GUI */
-		f.addKeyListener(this);
 		log = new JTextArea();
 		run = new JButton("Run");
 		addTrainee = new JButton("Add/Modify Trainee");
@@ -102,6 +102,8 @@ public class Base implements ActionListener, KeyListener{
 		pane = new JScrollPane(log);
 		pane.setVisible(true);
 		window.add(pane);
+		f.addKeyListener(this);
+		log.addKeyListener(this);
 		
 		// add all the button and log with appropriate constraints
 		window.setLayout(new GridBagLayout());
@@ -290,6 +292,17 @@ public class Base implements ActionListener, KeyListener{
 				} catch (FileNotFoundException e1) {
 					JOptionPane.showMessageDialog(null, "Uh oh! Something bad happened...");
 				}
+				break;
+			case KeyEvent.VK_H:
+				JTextArea msg = new JTextArea(
+						  "A -> Add or modify trainee\n"
+						+ "B -> Build or edit preceptor schedule\n"
+						+ "R -> Refresh info log\n"
+						+ "Q -> Quit program\n"
+						+ "G -> Run scheduling program with current trainees\n");
+				msg.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+				msg.setLineWrap(false);
+				JOptionPane.showMessageDialog(null, msg);
 				break;
 				
 		}

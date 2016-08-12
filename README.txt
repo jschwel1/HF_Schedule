@@ -67,9 +67,17 @@
 - Brief descriptions about each file.
 
 8/6/2016
-#Base.java
+# Base.java
 - Added key commands to work along with the buttons
 
 8/7/2016
-#Main.java and Shift.java
+# Main.java and Shift.java
 - removed automatic save window when the program finishes building schedule. Clicking the final schedule will bring up the save prompt. The original code is surrounded by block comments (/* ... */) 
+
+8/12/2016
+# Base.java
+- Type H for a help menu with all the key commands
+- Added Key listener to the info log in order to correct an issue with the key listener not working once any button or the info log on the base was clicked
+
+# Main.java
+- Only shows warning message if a trainee didn't make it onto the schedule

@@ -122,7 +122,8 @@ public class Main {
 		// ======================= END OF ORGANIZATION ==================== //
 		// ======================= DISPLAY & SAVE RESULTS ================= //
 		// show error message in case someone did not make it onto the schedule
-		JOptionPane.showMessageDialog(null, error, "Trainees missing at least one shift:", JOptionPane.ERROR_MESSAGE);
+		if (error.endsWith(", "))
+			JOptionPane.showMessageDialog(null, error, "Trainees missing at least one shift:", JOptionPane.ERROR_MESSAGE);
 
 		/* Print out schedule graphically and save as .csv file */
 		Shift.showSchedule(shift);
