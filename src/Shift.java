@@ -29,6 +29,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -36,6 +38,7 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -466,6 +469,74 @@ public class Shift{
 		}
 		frame.setVisible(true);
 		frame.revalidate();
+		
+		frame.addMouseListener(new MouseListener(){
+			public void mouseClicked(MouseEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+				fc.setDialogTitle("Save this schedule");
+				if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+					PrintWriter writer = null;
+					
+				try {	
+					if (!fc.getSelectedFile().getName().endsWith(".csv"))
+						writer = new PrintWriter(fc.getSelectedFile().getPath()+ ".csv");
+					else writer = new PrintWriter(fc.getSelectedFile());
+				} catch (FileNotFoundException e){
+					JOptionPane.showMessageDialog(null, "Error saving file");
+				}
+					char delim = ',';
+
+					writer.println(delim+"Sunday"+delim+"Monday"+delim+"Tuesday"+delim+"Wednesday"+delim+"Thursday"+delim+"Friday"+delim+"Saturday");
+
+					for (int i = 0; i < Trainee.SHIFTS_PER_DAY; i++){
+						switch (i){
+						case 0:
+							writer.print("\"0000-0600\"");
+							break;
+						case 1:
+							writer.print("\"0600-0900\"");
+							break;
+						case 2:
+							writer.print("\"0900-1200\"");
+							break;
+						case 3:
+							writer.print("\"1200-1500\"");
+							break;
+						case 4:
+							writer.print("\"1500-1800\"");
+							break;
+						case 5:
+							writer.print("\"1800-2100\"");
+							break;
+						case 6:
+							writer.print("\"2100-0000\"");
+							break;
+						default:
+							writer.print("####");
+						}
+						for (int j = 0; j < 7; j++){
+							if (schedule[i][j].hasTrainee())
+								writer.print(delim+schedule[i][j].getTrainee().getName());
+							else
+								writer.print(delim+"");
+
+						}
+						writer.println();
+					}
+					writer.close();
+				}
+			}
+			public void mouseEntered(MouseEvent arg0) {
+			}
+			public void mouseExited(MouseEvent arg0) {
+			}
+			public void mousePressed(MouseEvent arg0) {
+			}
+			public void mouseReleased(MouseEvent arg0) {			}
+			
+			
+		});
+		
 	}
 
 	/**

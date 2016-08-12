@@ -127,6 +127,7 @@ public class Main {
 		/* Print out schedule graphically and save as .csv file */
 		Shift.showSchedule(shift);
 		// Open FileChooser to save this schedule
+		/*
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Save this schedule");
 		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
@@ -175,7 +176,7 @@ public class Main {
 				writer.println();
 			}
 			writer.close();
-		}
+		}*/
 	}
 
 
