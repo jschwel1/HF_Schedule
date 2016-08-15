@@ -236,6 +236,7 @@ public class Base implements ActionListener, KeyListener{
 				Trainee.saveTraineeList(traineeList, fc.getSelectedFile());
 			else{
 				String path = fc.getSelectedFile().getPath();
+				if (path.indexOf(".") == -1) path += ".";
 				path = path.substring(0, path.indexOf("."))+Trainee.FILE_EXT;
 
 				Trainee.saveTraineeList(traineeList, new File(path));
@@ -252,6 +253,7 @@ public class Base implements ActionListener, KeyListener{
 				}
 				else {
 					String path = fc.getSelectedFile().getPath();
+					if (path.indexOf(".") == -1) path += ".";
 					path = path.substring(0,path.indexOf(".")) + Shift.FILE_EXT;
 					Shift.saveSchedule(schedule, new File(path));
 					scheduleFile=path;
