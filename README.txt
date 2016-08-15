@@ -38,8 +38,6 @@
 #### THINGS FOR FUTURE UPDATES ####
 - Update scheduling algorithm to give higher priorities to trainees with a 3-hr shift right before or after the current shift.
 - Make the preceptor schedule builder look better.
-- If all trainees got onto the schedule, there's no real need for the warning message.
-- Automatically save the Trainee and Schedule files with a specific filetype (.txt or a custom one).
 - On final schedule (or when saving), put a D, C, or B next to Trainee's name to show what he/she will be able to precept.
 #### UPDATES #####
 6/7/2016
@@ -81,3 +79,9 @@
 
 # Main.java
 - Only shows warning message if a trainee didn't make it onto the schedule
+
+
+8/15/2016
+#Base.java Shift.java Trainee.java
+- Added file extensions for trainee lists and preceptor schedules in their respective files
+- When saving files in Base.java, the functions check to make sure the files end with the appropriate extension. If not, it will replace the given extension with the appropriate one.

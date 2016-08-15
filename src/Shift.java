@@ -50,6 +50,7 @@ public class Shift{
 	public static int OVERNIGHT = 0;
 	public static int OVERNIGHT_HOURS = 6;
 	public static int SINGLE_SHIFT_HOURS = 3;
+	public static final String FILE_EXT = ".HFS";
 	/**
 	 * Build a Shift object without any preceptors or Trainees
 	 */

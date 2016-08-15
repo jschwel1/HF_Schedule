@@ -35,6 +35,7 @@ public class Trainee implements ActionListener{
 	public static final int SHIFTS_PER_DAY = 7;
 	public static final int REQUIRED_HOURS = 6;
 	private static final int NOT_SET = 999;
+	public static final String FILE_EXT = ".HFTL";
 	
 	int prefDay[];
 	int prefTime[];

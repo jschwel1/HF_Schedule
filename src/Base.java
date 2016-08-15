@@ -231,15 +231,31 @@ public class Base implements ActionListener, KeyListener{
 			JFileChooser fc = new JFileChooser("Save trainee list");
 			fc.setDialogTitle("Save Trainee List");			
 			fc.showSaveDialog(null);
-			Trainee.saveTraineeList(traineeList, fc.getSelectedFile());
+			// update filetype
+			if (fc.getSelectedFile().getPath().endsWith(Trainee.FILE_EXT))
+				Trainee.saveTraineeList(traineeList, fc.getSelectedFile());
+			else{
+				String path = fc.getSelectedFile().getPath();
+				path = path.substring(0, path.indexOf("."))+Trainee.FILE_EXT;
+
+				Trainee.saveTraineeList(traineeList, new File(path));
+			}
 		}
 		else if (e.getSource() == saveSchedule){
 			JFileChooser fc = new JFileChooser("Save Schedule");
 			fc.setDialogTitle("Save Preceptor Schedule");			
 			fc.showSaveDialog(null);
 			try {
-				Shift.saveSchedule(schedule, fc.getSelectedFile());
-				scheduleFile=fc.getSelectedFile().getName();
+				if (fc.getSelectedFile().getPath().endsWith(Shift.FILE_EXT)){
+					Shift.saveSchedule(schedule, fc.getSelectedFile());
+					scheduleFile=fc.getSelectedFile().getName();
+				}
+				else {
+					String path = fc.getSelectedFile().getPath();
+					path = path.substring(0,path.indexOf(".")) + Shift.FILE_EXT;
+					Shift.saveSchedule(schedule, new File(path));
+					scheduleFile=path;
+				}
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, "There was some sort of error when saving...");
 			}
