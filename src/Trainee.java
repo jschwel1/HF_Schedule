@@ -36,12 +36,17 @@ public class Trainee implements ActionListener{
 	public static final int REQUIRED_HOURS = 6;
 	private static final int NOT_SET = 999;
 	public static final String FILE_EXT = ".HFTL";
+	public static final int DEFAULT_CC_WEIGHT = 5;
+	public static final int DEFAULT_DR_WEIGHT = 5;
+	public static final int DEFAULT_SEM_WEIGHT = 2;
+	public static final int DEFAULT_PREF_WEIGHT = 6;
 	
 	int prefDay[];
 	int prefTime[];
 	int iterator;
 	int semesters;
 	int hours;
+	int weightCCP, weightDRP, weightSem, weightPref; 
 	boolean ccPrec;
 	boolean drPrec;
 	String name;
@@ -64,6 +69,11 @@ public class Trainee implements ActionListener{
 		hours = 0;
 		name = "";
 		
+		weightCCP = 5;
+		weightDRP = 5;
+		weightSem = 2;
+		weightPref = 6;
+		
 		for (int i = 0; i < Trainee.NUM_PREFERENCES; i++){
 			prefDay[i] = Trainee.NOT_SET;
 			prefTime[i] = Trainee.NOT_SET;
@@ -74,12 +84,17 @@ public class Trainee implements ActionListener{
 	 * @param s - Scanner with Trainee list file
 	 * @throws FileNotFoundException - throws error if file cannot be found
 	 */
-	Trainee(Scanner s) throws FileNotFoundException{
+	Trainee(Scanner s, int weight_CCP, int weight_DRP, int weight_Sem, int weight_Pref) throws FileNotFoundException{
 		this();
 		int count = 0;
 		int input;
 		char ans;
 
+		weightCCP = weight_CCP;
+		weightDRP = weight_DRP;
+		weightSem = weight_Sem;
+		weightPref = weight_Pref;
+		
 		// get name from first line
 		name = s.nextLine();
 //		System.out.println("Trainee's Name: " + name);
@@ -254,6 +269,33 @@ public class Trainee implements ActionListener{
 		return name;
 	}
 	
+	
+	public int getCCPWeight(){
+		return weightCCP;
+	}
+	public void setCCPWeight(int w){
+		weightCCP = w;
+	}
+	public int getDRPWeight(){
+		return weightDRP;
+	}
+	public void setDRPWeight(int w){
+		weightDRP = w;
+	}
+	public int getPrefWeight(){
+		return weightPref;
+	}
+	public void setPrefWeight(int w){
+		weightPref = w;
+	}
+	
+	public int getSemWeight(){
+		return weightSem;
+	}
+	public void setSemWeight(int w){
+		weightSem = w;
+	}
+	
 	/**
 	 * Checks the priorities of this trainee against another 
 	 * @param t other trainee
@@ -264,13 +306,13 @@ public class Trainee implements ActionListener{
 	 * 				   -1 -> They both have the same priority
 	 */
 	public int hasHigherPriorityThan(Trainee t){
-		int p1 = 5*this.getIter() + (this.numSemesters()*2);
-		int p2 = 5*t.getIter() + (t.numSemesters()*2);
+		int p1 = this.getPrefWeight()*this.getIter() + (this.numSemesters()*this.getSemWeight());
+		int p2 = t.getPrefWeight()*t.getIter() + (t.numSemesters()*t.getSemWeight());
 		
-		if (this.isCCPrecepting()) p1+= 5;
-		if (this.isDrPrecepting()) p1+= 5;
-		if (t.isCCPrecepting()) p2+= 5;
-		if (t.isDrPrecepting()) p2+= 5;
+		if (this.isCCPrecepting()) p1+= this.getCCPWeight();
+		if (this.isDrPrecepting()) p1+= this.getDRPWeight();
+		if (t.isCCPrecepting()) p2+= t.getCCPWeight();
+		if (t.isDrPrecepting()) p2+= t.getDRPWeight();
 		
 		if (p1 > p2) return 1;
 		if (p1 == p2) return -1;
@@ -290,20 +332,30 @@ public class Trainee implements ActionListener{
 	public int hasHigherPriorityThan(Trainee t, Shift s){
 		// Semesters in is not as important as precepting and the prefernce 
 		// number the trainee is on becomes exponentially more important
-		int numPrec, numSem, choice;
+		int CCPrec, DrPrec, numSem, choice;
 		int p1, p2;
 		
 		// get numbers from this trainee
-		numPrec = this.hasPreceptor(s);
+		CCPrec = this.hasCCPreceptor(s);
+		DrPrec = this.hasDrPreceptor(s);
 		numSem = this.numSemesters();
 		choice = this.getIter()+1;
-		p1 = (numPrec * 4) + (numSem * 2)  + (choice * choice);
+		p1 = 0;
+		p1 += CCPrec * this.getCCPWeight();
+		p1 += DrPrec * this.getDRPWeight();
+		p1 += numSem * this.getSemWeight();
+		p1 += choice * this.getPrefWeight();
 		
 		// get numbers for the trainee passed as parameter
-		numPrec = t.hasPreceptor(s);
+		CCPrec = t.hasCCPreceptor(s);
+		DrPrec = t.hasDrPreceptor(s);
 		numSem = t.numSemesters();
 		choice = t.getIter()+1;
-		p2 = (numPrec * 4) + (numSem * 2)  + (choice * choice);
+		p2 = 0;
+		p2 += CCPrec * t.getCCPWeight();
+		p2 += DrPrec * t.getDRPWeight();
+		p2 += numSem * t.getSemWeight();
+		p2 += choice * t.getPrefWeight();
 		
 		// return the appropriate value
 		if (p1 > p2) return 1;
@@ -570,6 +622,15 @@ public class Trainee implements ActionListener{
 		return n;
 	}
 	
+	public int hasCCPreceptor(Shift s){
+		if (s.hasCCPrec() && this.isCCPrecepting()) return 1;
+		return 0;
+	}
+	public int hasDrPreceptor(Shift s){
+		if (s.hasDrPrec() && this.isDrPrecepting()) return 1;
+		return 0;
+	}
+	
 	/**
 	 * Saves a list of trainees to a file
 	 * @param traineeList - the list of Trainees
@@ -579,7 +640,11 @@ public class Trainee implements ActionListener{
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(f);
-		
+			writer.println("Weight_CC: " + traineeList.get(0).getCCPWeight());
+			writer.println("Weight_DR: " + traineeList.get(0).getDRPWeight());
+			writer.println("Weight_Sem: " + traineeList.get(0).getSemWeight());
+			writer.println("Weight_Pref: " + traineeList.get(0).getPrefWeight());
+			writer.println("----------------");
 			for (int i = 0; i < traineeList.size(); i++){
 				writer.println(traineeList.get(i).getName());
 				writer.println(traineeList.get(i).getInfo());
@@ -600,16 +665,58 @@ public class Trainee implements ActionListener{
 	 */
 	public static ArrayList<Trainee> openTraineeList(Scanner s){
 		ArrayList<Trainee> traineeList = new ArrayList<Trainee>();
+		// initialize with defaults
+		int CCP_Weight = 5;
+		int DRP_Weight = 5;
+		int Sem_Weight = 2;
+		int Pref_Weight = 6;
 		
 		try {
+			String temp = "";
 			while (s.hasNext()){
-				traineeList.add(new Trainee(s));
+				temp = s.nextLine();
+				if (temp.toLowerCase().contains("weight")){
+					if(temp.toLowerCase().contains("cc")){
+						CCP_Weight = Integer.parseInt(getFinalElementOf(temp));
+					}
+					if(temp.toLowerCase().contains("dr")){
+						DRP_Weight = Integer.parseInt(getFinalElementOf(temp));
+					}
+					if(temp.toLowerCase().contains("sem")){
+						Sem_Weight = Integer.parseInt(getFinalElementOf(temp));
+					}
+					if(temp.toLowerCase().contains("pref")){
+						Pref_Weight = Integer.parseInt(getFinalElementOf(temp));
+					}
+				}
+				else if (temp.contains("----")) break;	
 			}
+			if (temp.contains("----")){
+				while (s.hasNext()){
+					traineeList.add(new Trainee(s, CCP_Weight, DRP_Weight, Sem_Weight, Pref_Weight));
+				}
+			}
+			else{
+				s.reset();
+				while (s.hasNext()){
+					traineeList.add(new Trainee(s, CCP_Weight, DRP_Weight, Sem_Weight, Pref_Weight));
+				}
+			}
+			
 		} catch (FileNotFoundException e1) {
 			JOptionPane.showMessageDialog(null, "Error Reading File" );
 		}
 			
 		return traineeList;
+	}
+	
+	public static String getFinalElementOf(String str){
+		int i;
+		
+		for (i = str.length()-1; i >= 0; i--){
+			if (str.charAt(i) == ' ') break;
+		}
+		return str.substring(i+1);
 	}
 	
 	

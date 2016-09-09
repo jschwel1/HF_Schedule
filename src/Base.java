@@ -27,8 +27,10 @@ import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 public class Base implements ActionListener, KeyListener{
@@ -162,6 +164,144 @@ public class Base implements ActionListener, KeyListener{
 		f.setVisible(true);
 
 	}
+	
+	public static void updatePriorityWeights(ArrayList<Trainee> tl){
+		// frame stuff (implemented later on)
+		JFrame f = new JFrame("Modify Priority Weights");
+		Container window = f.getContentPane();
+		GridBagConstraints c = new GridBagConstraints();
+		
+		// Assume all weights are the same across Trainees, take
+		// the baseline from the first in the arraylist
+		int CCP_Weight = tl.get(0).getCCPWeight();
+		int DrP_Weight = tl.get(0).getDRPWeight();
+		int Sem_Weight = tl.get(0).getSemWeight();
+		int Pref_Weight = tl.get(0).getPrefWeight();
+		
+		// set min and max values for all weights
+		int min = 0;
+		int max = 10;
+		
+		// make a JSlider for each weight
+		JSlider CC = new JSlider(JSlider.HORIZONTAL, min, max, CCP_Weight);
+		CC.setPaintTicks(true);
+		CC.setPaintLabels(true);
+		CC.setPaintTrack(true);
+		CC.setMajorTickSpacing(1);
+		JLabel CC_Label = new JLabel("CC Precepting Weight: ");
+		
+		JSlider Dr = new JSlider(JSlider.HORIZONTAL, min, max, DrP_Weight);
+		Dr.setPaintTicks(true);
+		Dr.setPaintLabels(true);
+		Dr.setPaintTrack(true);
+		Dr.setMajorTickSpacing(1);
+		JLabel Dr_Label = new JLabel("Driver Precepting Weight: ");
+		
+		JSlider Sem = new JSlider(JSlider.HORIZONTAL, min, max, Sem_Weight);
+		Sem.setPaintTicks(true);
+		Sem.setPaintLabels(true);
+		Sem.setPaintTrack(true);
+		Sem.setMajorTickSpacing(1);
+		JLabel Sem_Label = new JLabel("Semester Weight: ");
+		
+		JSlider Pref = new JSlider(JSlider.HORIZONTAL, min, max, Pref_Weight);
+		Pref.setPaintTicks(true);
+		Pref.setPaintLabels(true);
+		Pref.setPaintTrack(true);
+		Pref.setMajorTickSpacing(1);
+		JLabel Pref_Label = new JLabel("Preference Weight: ");
+		
+		// create save/cancel buttons
+		JButton apply = new JButton("Apply");
+		JButton cancel = new JButton("Cancel");
+		JButton default_button = new JButton("Default");
+		
+		apply.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				for (Trainee t: tl){
+					t.setCCPWeight(CC.getValue());
+					t.setDRPWeight(Dr.getValue());
+					t.setSemWeight(Sem.getValue());
+					t.setPrefWeight(Pref.getValue());
+				}
+				f.dispose();
+			}
+		});
+		cancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				f.dispose();
+			}
+		});
+		default_button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				for (Trainee t: tl){
+					t.setCCPWeight(Trainee.DEFAULT_CC_WEIGHT);
+					t.setDRPWeight(Trainee.DEFAULT_DR_WEIGHT);
+					t.setSemWeight(Trainee.DEFAULT_SEM_WEIGHT);
+					t.setPrefWeight(Trainee.DEFAULT_PREF_WEIGHT);
+				}
+				f.dispose();
+			}
+			
+		});
+		
+		// Create frame and container and add everything to it
+		f.setSize(500,400);
+		f.setVisible(true);
+		
+		window.setLayout(new GridBagLayout());
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 2;
+		c.weighty = 1;
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		window.add(CC_Label, c);
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		window.add(CC, c);
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		window.add(Dr_Label, c);
+
+		c.gridx = 1;
+		c.gridy = 1;
+		window.add(Dr, c);
+		
+		c.gridx = 0;
+		c.gridy = 2;
+		window.add(Sem_Label, c);
+
+		c.gridx = 1;
+		c.gridy = 2;
+		window.add(Sem, c);
+		
+		c.gridx = 0;
+		c.gridy = 3;
+		window.add(Pref_Label, c);
+		
+		c.gridx = 1;
+		c.gridy = 3;
+		window.add(Pref, c);
+		
+		c.gridx = 0;
+		c.gridy = 4;
+		window.add(apply, c);
+		
+		c.gridx = 1;
+		c.gridy = 4;
+		window.add(default_button, c);
+		
+		c.gridx = 2;
+		c.gridy = 4;
+		window.add(cancel, c);
+		
+	}
+	
+	
 
 /**
  * Checks the Action Events and performs the appropriate commands
@@ -322,6 +462,8 @@ public class Base implements ActionListener, KeyListener{
 				msg.setLineWrap(false);
 				JOptionPane.showMessageDialog(null, msg);
 				break;
+			case KeyEvent.VK_P:
+				updatePriorityWeights(traineeList);
 				
 		}
 		

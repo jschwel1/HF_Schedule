@@ -34,11 +34,13 @@
 	- R or r -> Refresh info log
 	- Q or q -> Quit program
 	- G or g -> Run the scheduling program
+	- P or p -> Edit priority weights 
 
 #### THINGS FOR FUTURE UPDATES ####
 - Update scheduling algorithm to give higher priorities to trainees with a 3-hr shift right before or after the current shift.
-- Make the preceptor schedule builder look better.
+- Make the preceptor schedule builder look better (use buttons rather than check-boxes).
 - On final schedule (or when saving), put a D, C, or B next to Trainee's name to show what he/she will be able to precept.
+- Add slider menu to easily modify priorities/weights of different things
 #### UPDATES #####
 6/7/2016
 # Trainee.java
