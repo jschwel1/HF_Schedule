@@ -12,6 +12,7 @@
 
 
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,6 +30,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
@@ -170,7 +172,7 @@ public class Base implements ActionListener, KeyListener{
 		JFrame f = new JFrame("Modify Priority Weights");
 		Container window = f.getContentPane();
 		GridBagConstraints c = new GridBagConstraints();
-		
+		JPanel button_pane = new JPanel();
 		// Assume all weights are the same across Trainees, take
 		// the baseline from the first in the arraylist
 		int CCP_Weight = tl.get(0).getCCPWeight();
@@ -180,35 +182,39 @@ public class Base implements ActionListener, KeyListener{
 		
 		// set min and max values for all weights
 		int min = 0;
-		int max = 10;
+		int max = 20;
 		
 		// make a JSlider for each weight
 		JSlider CC = new JSlider(JSlider.HORIZONTAL, min, max, CCP_Weight);
 		CC.setPaintTicks(true);
 		CC.setPaintLabels(true);
 		CC.setPaintTrack(true);
-		CC.setMajorTickSpacing(1);
+		CC.setMajorTickSpacing(5);
+		CC.setMinorTickSpacing(1);
 		JLabel CC_Label = new JLabel("CC Precepting Weight: ");
 		
 		JSlider Dr = new JSlider(JSlider.HORIZONTAL, min, max, DrP_Weight);
 		Dr.setPaintTicks(true);
 		Dr.setPaintLabels(true);
 		Dr.setPaintTrack(true);
-		Dr.setMajorTickSpacing(1);
+		Dr.setMajorTickSpacing(5);
+		Dr.setMinorTickSpacing(1);
 		JLabel Dr_Label = new JLabel("Driver Precepting Weight: ");
 		
 		JSlider Sem = new JSlider(JSlider.HORIZONTAL, min, max, Sem_Weight);
 		Sem.setPaintTicks(true);
 		Sem.setPaintLabels(true);
 		Sem.setPaintTrack(true);
-		Sem.setMajorTickSpacing(1);
+		Sem.setMajorTickSpacing(5);
+		Sem.setMinorTickSpacing(1);
 		JLabel Sem_Label = new JLabel("Semester Weight: ");
 		
 		JSlider Pref = new JSlider(JSlider.HORIZONTAL, min, max, Pref_Weight);
 		Pref.setPaintTicks(true);
 		Pref.setPaintLabels(true);
 		Pref.setPaintTrack(true);
-		Pref.setMajorTickSpacing(1);
+		Pref.setMajorTickSpacing(5);
+		Pref.setMinorTickSpacing(1);
 		JLabel Pref_Label = new JLabel("Preference Weight: ");
 		
 		// create save/cancel buttons
@@ -225,11 +231,13 @@ public class Base implements ActionListener, KeyListener{
 					t.setPrefWeight(Pref.getValue());
 				}
 				f.dispose();
+				
 			}
 		});
 		cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				f.dispose();
+				
 			}
 		});
 		default_button.addActionListener(new ActionListener(){
@@ -240,13 +248,16 @@ public class Base implements ActionListener, KeyListener{
 					t.setSemWeight(Trainee.DEFAULT_SEM_WEIGHT);
 					t.setPrefWeight(Trainee.DEFAULT_PREF_WEIGHT);
 				}
-				f.dispose();
+				CC.setValue(Trainee.DEFAULT_CC_WEIGHT);
+				Dr.setValue(Trainee.DEFAULT_DR_WEIGHT);
+				Sem.setValue(Trainee.DEFAULT_SEM_WEIGHT);
+				Pref.setValue(Trainee.DEFAULT_PREF_WEIGHT);
 			}
 			
 		});
 		
 		// Create frame and container and add everything to it
-		f.setSize(500,400);
+		f.setSize(550,400);
 		f.setVisible(true);
 		
 		window.setLayout(new GridBagLayout());
@@ -254,34 +265,38 @@ public class Base implements ActionListener, KeyListener{
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 2;
 		c.weighty = 1;
+		c.ipadx = 10;
 		
 		c.gridx = 0;
 		c.gridy = 0;
 		window.add(CC_Label, c);
 		
-		c.gridx = 1;
-		c.gridy = 0;
-		window.add(CC, c);
-		
 		c.gridx = 0;
 		c.gridy = 1;
 		window.add(Dr_Label, c);
 
-		c.gridx = 1;
-		c.gridy = 1;
-		window.add(Dr, c);
-		
 		c.gridx = 0;
 		c.gridy = 2;
 		window.add(Sem_Label, c);
+		
+
+		c.gridx = 0;
+		c.gridy = 3;
+		window.add(Pref_Label, c);
+		
+		c.ipadx = 20;
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		window.add(CC, c);
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		window.add(Dr, c);
 
 		c.gridx = 1;
 		c.gridy = 2;
 		window.add(Sem, c);
-		
-		c.gridx = 0;
-		c.gridy = 3;
-		window.add(Pref_Label, c);
 		
 		c.gridx = 1;
 		c.gridy = 3;
@@ -289,15 +304,12 @@ public class Base implements ActionListener, KeyListener{
 		
 		c.gridx = 0;
 		c.gridy = 4;
-		window.add(apply, c);
-		
-		c.gridx = 1;
-		c.gridy = 4;
-		window.add(default_button, c);
-		
-		c.gridx = 2;
-		c.gridy = 4;
-		window.add(cancel, c);
+		c.gridwidth = 3;
+		window.add(button_pane, c);
+		button_pane.setLayout(new FlowLayout());
+		button_pane.add(apply);
+		button_pane.add(default_button);
+		button_pane.add(cancel);
 		
 	}
 	
@@ -344,6 +356,22 @@ public class Base implements ActionListener, KeyListener{
 				}
 				
 			}
+			
+			// update all preferences to that of the first trainee is the list.
+			// Acts as an assurance that they will all be weighted equally
+			// in case they were imported from different files
+			int CCP_Weight = traineeList.get(0).getCCPWeight();
+			int DrP_Weight = traineeList.get(0).getDRPWeight();
+			int Sem_Weight = traineeList.get(0).getSemWeight();
+			int Pref_Weight = traineeList.get(0).getPrefWeight();
+			
+			for (Trainee t: traineeList){
+				t.setCCPWeight(CCP_Weight);
+				t.setDRPWeight(DrP_Weight);
+				t.setSemWeight(Sem_Weight);
+				t.setPrefWeight(Pref_Weight);
+			}
+			
 		}
 		else if (e.getSource() == openSchedule){
 			JFileChooser fc = new JFileChooser("Open existing schedule file");
@@ -457,20 +485,29 @@ public class Base implements ActionListener, KeyListener{
 						+ "B -> Build or edit preceptor schedule\n"
 						+ "R -> Refresh info log\n"
 						+ "Q -> Quit program\n"
-						+ "G -> Run scheduling program with current trainees\n");
+						+ "G -> Run scheduling program with current trainees\n"
+						+ "P -> Change priority weights\n");
 				msg.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 				msg.setLineWrap(false);
 				JOptionPane.showMessageDialog(null, msg);
 				break;
 			case KeyEvent.VK_P:
 				updatePriorityWeights(traineeList);
+				break;
+			case KeyEvent.VK_DELETE:
+				int index = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the trainee you would like to remove (one at a time)"));
+				traineeList.remove(index);
+				break;
 				
 		}
 		
 		// UPDATE LOG
 		log.setText("Schedule File: " + scheduleFile + "\n\nTrainees:\n");
 		for (int i = 0; i < traineeList.size(); i++){
-			log.append("("+i+") " + traineeList.get(i).print() + "\n\n");
+			log.append("("+i+") " + traineeList.get(i).print() + "\n");
+			log.append(traineeList.get(i).getCCPWeight() + " " + traineeList.get(i).getDRPWeight()
+					+ " " + traineeList.get(i).getSemWeight() + " " + traineeList.get(i).getPrefWeight()
+					+ "\n---------------------\n");
 		}
 	}
 	

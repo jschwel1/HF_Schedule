@@ -35,12 +35,11 @@
 	- Q or q -> Quit program
 	- G or g -> Run the scheduling program
 	- P or p -> Edit priority weights 
+	- Delete -> Remove a Trainee from the list
 
 #### THINGS FOR FUTURE UPDATES ####
 - Update scheduling algorithm to give higher priorities to trainees with a 3-hr shift right before or after the current shift.
 - Make the preceptor schedule builder look better (use buttons rather than check-boxes).
-- On final schedule (or when saving), put a D, C, or B next to Trainee's name to show what he/she will be able to precept.
-- Add slider menu to easily modify priorities/weights of different things
 #### UPDATES #####
 6/7/2016
 # Trainee.java
@@ -87,3 +86,10 @@
 #Base.java Shift.java Trainee.java
 - Added file extensions for trainee lists and preceptor schedules in their respective files
 - When saving files in Base.java, the functions check to make sure the files end with the appropriate extension. If not, it will replace the given extension with the appropriate one.
+
+9/9/2016
+# All files
+- Added slider menu to modify priorities
+- Fixed a lot of things, so now the thing works as it should a lot better
+- Added delete key for removing a trainee more easily
+- Other bug fixes and improvements

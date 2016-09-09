@@ -414,12 +414,12 @@ public class Shift{
 		GridBagConstraints c;
 		
 		frame.setVisible(true);
-		frame.setSize(750,700);
+		frame.setSize(650,350);
 	
 		
 		window.setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
+		c.fill = GridBagConstraints.BOTH;
 		c.gridheight = 1;
 		c.gridwidth = 1;
 		
@@ -457,16 +457,22 @@ public class Shift{
 		
 		for (int d = 0; d < blocks.length; d++){
 			for (int t = 0; t < blocks[0].length; t++){
-				if (schedule[d][t].hasTrainee())
+				if (schedule[d][t].hasTrainee()){
 					blocks[d][t] = new JTextField(schedule[d][t].getTrainee().getName());
+					if (schedule[d][t].getTrainee().isCCPrecepting() && schedule[d][t].hasCCPrec())
+						blocks[d][t].setText(blocks[d][t].getText() + " [C]");
+					if (schedule[d][t].getTrainee().isDrPrecepting() && schedule[d][t].hasDrPrec())
+						blocks[d][t].setText(blocks[d][t].getText() + " [D]");
+				}
 				else
 					blocks[d][t] = new JTextField();
 				blocks[d][t].setEditable(false);
 				c.gridx = d+1;
 				c.gridy = t+1;
 				window.add(blocks[d][t], c);
-				System.out.println("Adding ("+d+", "+t+")");
+//				System.out.println("Adding ("+d+", "+t+")");
 			}
+			System.out.println("DONE");
 		}
 		frame.setVisible(true);
 		frame.revalidate();

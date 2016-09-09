@@ -357,6 +357,10 @@ public class Trainee implements ActionListener{
 		p2 += numSem * t.getSemWeight();
 		p2 += choice * t.getPrefWeight();
 		
+		
+		System.out.println("------\n"+this.getName() + " has a priority of: " + p1 + "\n"
+				+ t.getName() + " has a priority of: " + p2 + "\n-----\n");
+		
 		// return the appropriate value
 		if (p1 > p2) return 1;
 		if (p2 > p1) return 0;
@@ -513,8 +517,32 @@ public class Trainee implements ActionListener{
 		shiftButton = new JButton[8][SHIFTS_PER_DAY+1];
 		
 		
-		submit.addActionListener(this);
-		submit.setActionCommand("submit");
+		submit.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent e) {
+				// Integer.parseInt() can throw an error if the value isn't strictly a number
+				try {
+					name = nameInput.getText();
+					semesters = Integer.parseInt(semesterInput.getText());
+					ccPrec = ccPrecepting.isSelected();
+					drPrec = drPrecepting.isSelected();
+					
+					for (int d = 1; d < shiftButton.length; d++){
+						for (int t = 1; t < shiftButton[0].length; t++){
+							if (!shiftButton[d][t].getText().equals("#")){
+								prefDay[Integer.parseInt(shiftButton[d][t].getText())-1] = d-1;
+								prefTime[Integer.parseInt(shiftButton[d][t].getText())-1] = t-1;
+							}
+						}
+					}
+					frame.dispose();
+				} catch (NumberFormatException nfe){
+					JOptionPane.showMessageDialog(null, "Error: check input types. Probably caused by # semesters field, ensure it is entered as a number");
+				}
+				
+			}
+			
+		});
 		
 		// keeps track of how many shifts were already selected
 		iterator = 0;
@@ -757,7 +785,7 @@ public class Trainee implements ActionListener{
 			}
 		}
 		// if the source was from the GUI submit button, try setting all the values to what was put on the GUI window
-		if (e.getSource() == submit){
+		/*if (e.getSource() == submit){
 			// Integer.parseInt() can throw an error if the value isn't strictly a number
 			try {
 				name = nameInput.getText();
@@ -776,6 +804,6 @@ public class Trainee implements ActionListener{
 			} catch (NumberFormatException nfe){
 				JOptionPane.showMessageDialog(null, "Error: check input types. Probably caused by # semesters field, ensure it is entered as a number");
 			}
-		}
+		}*/
 	}
 }

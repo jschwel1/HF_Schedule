@@ -39,6 +39,37 @@ public class Main {
 		Shift[][] shift = schedule;
 		String error = "The following trainees did not get at least one shift: ";
 		int loopCount = 0;
+		
+		// Assure all priority weights are the same (as taken from the first
+		// trainee in the list)
+		if (tList.size() > 0){
+			int CCP_Weight = tList.get(0).getCCPWeight();
+			int DrP_Weight = tList.get(0).getDRPWeight();
+			int Sem_Weight = tList.get(0).getSemWeight();
+			int Pref_Weight = tList.get(0).getPrefWeight();
+			
+			for (Trainee t: tList){
+				t.setCCPWeight(CCP_Weight);
+				t.setDRPWeight(DrP_Weight);
+				t.setSemWeight(Sem_Weight);
+				t.setPrefWeight(Pref_Weight);
+				
+				t.setIterator(0);
+				t.setHours(0);
+				
+			}
+		}
+		else {}
+		
+		// clear out all trainees from the schedule (in case of re-run)
+		for (int i = 0; i < schedule.length; i++){
+			for (int j = 0; j < schedule[0].length; j++){
+				if (schedule[i][j].hasTrainee())
+					schedule[i][j].removeTrainee(j);
+			}
+		}
+		
+		
 		// two three hour shifts...
 		list1.addAll(tList);
 		list1.addAll(tList);
@@ -127,57 +158,7 @@ public class Main {
 
 		/* Print out schedule graphically and save as .csv file */
 		Shift.showSchedule(shift);
-		// Open FileChooser to save this schedule
-		/*
-		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("Save this schedule");
-		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
-			PrintWriter writer;
-
-			if (!fc.getSelectedFile().getName().endsWith(".csv")) 
-				writer = new PrintWriter(fc.getSelectedFile().getPath()+ ".csv");
-			else writer = new PrintWriter(fc.getSelectedFile());
-			char delim = ',';
-
-			writer.println(delim+"Sunday"+delim+"Monday"+delim+"Tuesday"+delim+"Wednesday"+delim+"Thursday"+delim+"Friday"+delim+"Saturday");
-
-			for (int i = 0; i < Trainee.SHIFTS_PER_DAY; i++){
-				switch (i){
-				case 0:
-					writer.print("\"0000-0600\"");
-					break;
-				case 1:
-					writer.print("\"0600-0900\"");
-					break;
-				case 2:
-					writer.print("\"0900-1200\"");
-					break;
-				case 3:
-					writer.print("\"1200-1500\"");
-					break;
-				case 4:
-					writer.print("\"1500-1800\"");
-					break;
-				case 5:
-					writer.print("\"1800-2100\"");
-					break;
-				case 6:
-					writer.print("\"2100-0000\"");
-					break;
-				default:
-					writer.print("####");
-				}
-				for (int j = 0; j < 7; j++){
-					if (schedule[i][j].hasTrainee())
-						writer.print(delim+schedule[i][j].getTrainee().getName());
-					else
-						writer.print(delim+"");
-
-				}
-				writer.println();
-			}
-			writer.close();
-		}*/
+		
 	}
 
 
